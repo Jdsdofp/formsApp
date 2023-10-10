@@ -1,22 +1,26 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Mapping
 import numbers
+import typing
 
-from attrs import evolve, field, frozen
-from rpds import HashTrieMap
+from pyrsistent import pmap
+from pyrsistent.typing import PMap
+import attr
 
 from jsonschema.exceptions import UndefinedTypeCheck
 
 
-# unfortunately, the type of HashTrieMap is generic, and if used as an attrs
+# unfortunately, the type of pmap is generic, and if used as the attr.ib
 # converter, the generic type is presented to mypy, which then fails to match
 # the concrete type of a type checker mapping
 # this "do nothing" wrapper presents the correct information to mypy
-def _typed_map_converter(
-    init_val: Mapping[str, Callable[[TypeChecker, Any], bool]],
-) -> HashTrieMap[str, Callable[[TypeChecker, Any], bool]]:
-    return HashTrieMap.convert(init_val)
+def _typed_pmap_converter(
+    init_val: typing.Mapping[
+        str,
+        typing.Callable[["TypeChecker", typing.Any], bool],
+    ],
+) -> PMap[str, typing.Callable[["TypeChecker", typing.Any], bool]]:
+    return pmap(init_val)
 
 
 def is_array(checker, instance):
@@ -57,7 +61,7 @@ def is_any(checker, instance):
     return True
 
 
-@frozen(repr=False)
+@attr.s(frozen=True, repr=False)
 class TypeChecker:
     """
     A :kw:`type` property checker.
@@ -78,9 +82,12 @@ class TypeChecker:
             The initial mapping of types to their checking functions.
     """
 
-    _type_checkers: HashTrieMap[
-        str, Callable[[TypeChecker, Any], bool],
-    ] = field(default=HashTrieMap(), converter=_typed_map_converter)
+    _type_checkers: PMap[
+        str, typing.Callable[["TypeChecker", typing.Any], bool],
+    ] = attr.ib(
+        default=pmap(),
+        converter=_typed_pmap_converter,
+    )
 
     def __repr__(self):
         types = ", ".join(repr(k) for k in sorted(self._type_checkers))
@@ -113,7 +120,7 @@ class TypeChecker:
 
         return fn(self, instance)
 
-    def redefine(self, type: str, fn) -> TypeChecker:
+    def redefine(self, type: str, fn) -> "TypeChecker":
         """
         Produce a new checker with the given type redefined.
 
@@ -132,7 +139,7 @@ class TypeChecker:
         """
         return self.redefine_many({type: fn})
 
-    def redefine_many(self, definitions=()) -> TypeChecker:
+    def redefine_many(self, definitions=()) -> "TypeChecker":
         """
         Produce a new checker with the given types redefined.
 
@@ -143,9 +150,9 @@ class TypeChecker:
                 A dictionary mapping types to their checking functions.
         """
         type_checkers = self._type_checkers.update(definitions)
-        return evolve(self, type_checkers=type_checkers)
+        return attr.evolve(self, type_checkers=type_checkers)
 
-    def remove(self, *types) -> TypeChecker:
+    def remove(self, *types) -> "TypeChecker":
         """
         Produce a new checker with the given types forgotten.
 
@@ -161,13 +168,14 @@ class TypeChecker:
 
                 if any given type is unknown to this object
         """
+
         type_checkers = self._type_checkers
         for each in types:
             try:
                 type_checkers = type_checkers.remove(each)
             except KeyError:
                 raise UndefinedTypeCheck(each)
-        return evolve(self, type_checkers=type_checkers)
+        return attr.evolve(self, type_checkers=type_checkers)
 
 
 draft3_type_checker = TypeChecker(

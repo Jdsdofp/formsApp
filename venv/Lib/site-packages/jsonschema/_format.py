@@ -11,13 +11,10 @@ import warnings
 from jsonschema.exceptions import FormatError
 
 _FormatCheckCallable = typing.Callable[[object], bool]
-#: A format checker callable.
 _F = typing.TypeVar("_F", bound=_FormatCheckCallable)
 _RaisesType = typing.Union[
     typing.Type[Exception], typing.Tuple[typing.Type[Exception], ...],
 ]
-
-_RE_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$", re.ASCII)
 
 
 class FormatChecker:
@@ -45,7 +42,7 @@ class FormatChecker:
     checkers: dict[
         str,
         tuple[_FormatCheckCallable, _RaisesType],
-    ] = {}  # noqa: RUF012
+    ] = {}
 
     def __init__(self, formats: typing.Iterable[str] | None = None):
         if formats is None:
@@ -53,9 +50,9 @@ class FormatChecker:
         self.checkers = {k: self.checkers[k] for k in formats}
 
     def __repr__(self):
-        return f"<FormatChecker checkers={sorted(self.checkers)}>"
+        return "<FormatChecker checkers={}>".format(sorted(self.checkers))
 
-    def checks(  # noqa: D417
+    def checks(
         self, format: str, raises: _RaisesType = (),
     ) -> typing.Callable[[_F], _F]:
         """
@@ -75,7 +72,7 @@ class FormatChecker:
                 The exception object will be accessible as the
                 `jsonschema.exceptions.ValidationError.cause` attribute of the
                 resulting validation error.
-        """  # noqa: D214,D405 (charliermarsh/ruff#3547)
+        """
 
         def _checks(func: _F) -> _F:
             self.checkers[format] = (func, raises)
@@ -128,6 +125,7 @@ class FormatChecker:
 
                 if the instance does not conform to ``format``
         """
+
         if format not in self.checkers:
             return
 
@@ -158,6 +156,7 @@ class FormatChecker:
 
             bool: whether it conformed
         """
+
         try:
             self.check(instance, format)
         except FormatError:
@@ -274,7 +273,7 @@ with suppress(ImportError):
     def is_host_name(instance: object) -> bool:
         if not isinstance(instance, str):
             return True
-        return FQDN(instance, min_labels=1).is_valid
+        return FQDN(instance).is_valid
 
 
 with suppress(ImportError):
@@ -398,10 +397,7 @@ def is_regex(instance: object) -> bool:
 def is_date(instance: object) -> bool:
     if not isinstance(instance, str):
         return True
-    return bool(
-        _RE_DATE.fullmatch(instance)
-        and datetime.date.fromisoformat(instance)
-    )
+    return bool(instance.isascii() and datetime.date.fromisoformat(instance))
 
 
 @_checks_drafts(draft3="time", raises=ValueError)

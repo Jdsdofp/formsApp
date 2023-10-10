@@ -2,7 +2,6 @@
 The ``jsonschema`` command line.
 """
 
-from importlib import metadata
 from json import JSONDecodeError
 from textwrap import dedent
 import argparse
@@ -12,14 +11,19 @@ import traceback
 import warnings
 
 try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata  # type: ignore
+
+try:
     from pkgutil import resolve_name
 except ImportError:
     from pkgutil_resolve_name import resolve_name  # type: ignore
 
-from attrs import define, field
+import attr
 
 from jsonschema.exceptions import SchemaError
-from jsonschema.validators import _RefResolver, validator_for
+from jsonschema.validators import RefResolver, validator_for
 
 warnings.warn(
     (
@@ -36,12 +40,12 @@ class _CannotLoadFile(Exception):
     pass
 
 
-@define
+@attr.s
 class _Outputter:
 
-    _formatter = field()
-    _stdout = field()
-    _stderr = field()
+    _formatter = attr.ib()
+    _stdout = attr.ib()
+    _stderr = attr.ib()
 
     @classmethod
     def from_arguments(cls, arguments, stdout, stderr):
@@ -78,7 +82,7 @@ class _Outputter:
         self._stdout.write(self._formatter.validation_success(**kwargs))
 
 
-@define
+@attr.s
 class _PrettyFormatter:
 
     _ERROR_MSG = dedent(
@@ -120,10 +124,10 @@ class _PrettyFormatter:
         return self._SUCCESS_MSG.format(path=instance_path)
 
 
-@define
+@attr.s
 class _PlainFormatter:
 
-    _error_format = field()
+    _error_format = attr.ib()
 
     def filenotfound_error(self, path, exc_info):
         return "{!r} does not exist.\n".format(path)
@@ -247,12 +251,11 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):
     except _CannotLoadFile:
         return 1
 
-    Validator = arguments["validator"]
-    if Validator is None:
-        Validator = validator_for(schema)
+    if arguments["validator"] is None:
+        arguments["validator"] = validator_for(schema)
 
     try:
-        Validator.check_schema(schema)
+        arguments["validator"].check_schema(schema)
     except SchemaError as error:
         outputter.validation_error(
             instance_path=arguments["schema"],
@@ -273,12 +276,12 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):
                 raise _CannotLoadFile()
         instances = ["<stdin>"]
 
-    resolver = _RefResolver(
+    resolver = RefResolver(
         base_uri=arguments["base_uri"],
         referrer=schema,
     ) if arguments["base_uri"] is not None else None
 
-    validator = Validator(schema, resolver=resolver)
+    validator = arguments["validator"](schema, resolver=resolver)
     exit_code = 0
     for each in instances:
         try:
