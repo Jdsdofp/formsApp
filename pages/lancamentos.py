@@ -9,15 +9,15 @@ st.set_page_config(
     page_title="Forms SCs | Lançar"
 )
 
-st.header(body="Registro de SC", anchor=False, divider=True)
+st.header(body="Registro de SC", anchor=False)
 
 col1, col2 = st.columns(2)
 
 with st.form("form1"):
-    desc = col1.text_input("Descrição da solicitação", placeholder="Solicitante", disabled=True)
-    tp_desc = col1.number_input("Loja", placeholder="Codigo da loja", step=None, max_value=299)
+    desc = col1.text_input(label="Descrição da solicitação", placeholder="Solicitante", disabled=True)
+    tp_desc = col1.number_input(label="Loja", step=None, max_value=299)
     uploaded_file_1 = col1.file_uploader(label="Selecione um arquivo: 1", type=["csv", "txt", "xlsx", "pdf"])
-    uploaded_file_2 = col1.file_uploader("Escolha um arquivo: 2", type=["csv", "txt", "xlsx", "pdf"])    
+    uploaded_file_2 = col1.file_uploader(label="Escolha um arquivo: 2", type=["csv", "txt", "xlsx", "pdf"])    
 
 
     javascript_code = """
@@ -40,8 +40,9 @@ with st.form("form1"):
     # Inserir o código JavaScript no Streamlit
     col1.markdown(javascript_code, unsafe_allow_html=True)
     # Widget de entrada de data
-    selected_date = col1.date_input("Data de abertura: ", format="DD/MM/YYYY", disabled=True)
-    selected_date_send = col1.date_input("Data da requisição: ", format="DD/MM/YYYY")
+    selected_date = col1.date_input(label="Data de abertura: ", format="%d/%m/%Y", disabled=True)
+    
+    selected_date_send = col1.date_input(label="Data da requisição: ", format="DD/MM/YYYY")
 
     # # # # # # # # # COLUNA 02 DE FORMS # # # # # # # # # # # # # # # # #
     obs = col2.text_area(label="Descrição Serviços:")

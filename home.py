@@ -8,8 +8,7 @@ st.set_page_config(
 )
 
 st.title("Formulario de abertura SCs", anchor=False)
-
-st.sidebar.image("img\Logo_CoraçãoDrogaria_Globo.png")
+st.sidebar.image("img\Logo_CoraçãoDrogaria_Globo.png", caption="Forms App - Controle de SCs")
 
 col1, col2 = st.columns(2)
 col1.metric(label="Aberto",value="20", help="Numero de Solicitações que foram abertas hoje", delta="+1")
