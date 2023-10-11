@@ -24,6 +24,18 @@ st.markdown(
 st.markdown(
     """
     <style>
+    .st-eb {
+        display: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+st.markdown(
+    """
+    <style>
     #MainMenu {visibility: hidden;}
     </style>
     """,
@@ -39,7 +51,7 @@ col2.metric(label="Fechado",value="40", help="Numero de Solicitações fechadas"
 
 #tabela de registros
 st.divider()
-df = pd.DataFrame(columns=['Nº Solicitação','Cod. Filial', 'Data Registro','Data Chamado', 'Tipo de serviço', 'Tipo Emergencia'])
+df = pd.DataFrame(columns=['Nº Solicitação','Cod. Filial', 'Data Registro','Data Chamado', 'Tipo de serviço', 'Tipo Emergencia', 'Status'])
 st.markdown("""<h5 style='color: #D24545'>Lista de registros</h5>""", unsafe_allow_html=True)
 st.table(df)
 

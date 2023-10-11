@@ -7,7 +7,8 @@ st.set_page_config(
 )
 
 config_lay()
-    
+
+
 
 st.header(body="Registro de SC", anchor=False)
 
