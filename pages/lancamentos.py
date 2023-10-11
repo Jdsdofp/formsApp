@@ -57,11 +57,6 @@ css = """
     color: white; /* Define a cor do texto no botão */
 }
 
-/* Define a cor de fundo do botão quando o mouse passa por cima */
-.stButton>button:hover {
-    background-color: #d35454; /* Altere a cor para a cor desejada ao passar o mouse por cima */
-    color: white;
-}
 </style>
 """
 
