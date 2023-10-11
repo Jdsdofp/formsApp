@@ -1,8 +1,4 @@
 import streamlit as st
-import locale
-
-# Defina a localização para português do Brasil (pt_BR)
-locale.setlocale(locale.LC_TIME, 'pt_BR.utf8')
 
 st.set_page_config(
     page_icon="img\Logo_CoraçãoDrogaria_Globo.ico",
