@@ -35,7 +35,6 @@ pytz
 pytz-deprecation-shim
 referencing
 requests
-rich
 rpds-py
 six
 smmap
