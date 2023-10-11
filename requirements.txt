@@ -35,7 +35,6 @@ pytz
 pytz-deprecation-shim
 referencing
 requests
-rpds-py
 six
 smmap
 streamlit
