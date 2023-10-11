@@ -36,8 +36,8 @@ with st.form("form1"):
     # Inserir o código JavaScript no Streamlit
     col1.markdown(javascript_code, unsafe_allow_html=True)
     # Widget de entrada de data
-    selected_date = col1.date_input("Data de abertura: ", format="DD/MM/YYYY", disabled=True)
-    selected_date_send = col1.date_input("Data da requisição: ", format="DD/MM/YYYY")
+    selected_date = col1.date_input("Data de abertura: ", disabled=True)
+    selected_date_send = col1.date_input("Data da requisição: ")
 
     # # # # # # # # # COLUNA 02 DE FORMS # # # # # # # # # # # # # # # # #
     obs = col2.text_area(label="Descrição Serviços:")
