@@ -1,9 +1,13 @@
 import streamlit as st
+from logo import *
 
 st.set_page_config(
-    page_icon="img\Logo_CoraçãoDrogaria_Globo.ico",
+    page_icon="Logo_CoraçãoDrogaria_Globo.ico",
     page_title="Forms SCs | Lançar"
 )
+
+config_lay()
+    
 
 st.header(body="Registro de SC", anchor=False)
 
@@ -14,7 +18,7 @@ with st.form("form1"):
     tp_desc = col1.number_input("Loja", step=None, max_value=299)
     uploaded_file_1 = col1.file_uploader(label="Selecione um arquivo: 1", type=["csv", "txt", "xlsx", "pdf"])
     uploaded_file_2 = col1.file_uploader("Escolha um arquivo: 2", type=["csv", "txt", "xlsx", "pdf"])    
-
+    class_servico = col1.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria'])
 
     javascript_code = """
     <script>
@@ -43,7 +47,7 @@ with st.form("form1"):
     obs = col2.text_area(label="Descrição Serviços:")
     tp_urg = col2.selectbox(label="Emegencial?", options=['SIM', 'NÃO'])
     gr_complexidade = col2.selectbox(label="Classificação emergencial:", options=['Biologico', 'Estruturais', 'Eletricos', 'Perdas ou Avarias', 'Operação', 'Imagem'])
-    nr_chamado = col2.text_input(label="Número do chamado")
+    nr_chamado = col2.text_input(label="Número do chamado: ")
 
 css = """
 <style>

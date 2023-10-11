@@ -1,4 +1,5 @@
 import streamlit as st
+from logo import *
 
 # Cabeçalho personalizado
 
@@ -18,7 +19,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.title("Formulario de abertura SCs", anchor=False)
-st.sidebar.image("Logo_Drogaria_Globo.png", caption="Forms App - Controle de SCs")
+config_lay()
 
 col1, col2 = st.columns(2)
 col1.metric(label="Aberto",value="20", help="Numero de Solicitações que foram abertas hoje", delta="+1")
