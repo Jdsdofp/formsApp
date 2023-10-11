@@ -1,12 +1,22 @@
 import streamlit as st
 
 # Cabeçalho personalizado
+
+
 st.set_page_config(
     page_icon="Logo_CoraçãoDrogaria_Globo.ico",
     page_title="Forms SCs",
     layout="wide"
 )
 
+st.markdown(
+    """
+    <style>
+    #MainMenu {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.title("Formulario de abertura SCs", anchor=False)
 st.sidebar.image("Logo_Drogaria_Globo.png", caption="Forms App - Controle de SCs")
 

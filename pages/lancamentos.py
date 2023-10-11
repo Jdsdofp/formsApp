@@ -56,6 +56,16 @@ css = """
 """
 
 # Aplicar o CSS personalizado usando st.markdown
+st.markdown(
+    """
+    <style>
+    #MainMenu {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
 st.markdown(css, unsafe_allow_html=True)
 
 st.button(label="Registar", use_container_width=True)
