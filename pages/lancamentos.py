@@ -5,7 +5,7 @@ st.set_page_config(
     page_title="Forms SCs | Lançar"
 )
 
-st.header(body="Registro de SC", anchor=False, divider=True)
+st.header(body="Registro de SC", anchor=False)
 
 col1, col2 = st.columns(2)
 
