@@ -15,7 +15,8 @@ col1, col2 = st.columns(2)
 
 with st.form("form1"):
     desc = col1.text_input("Descrição da solicitação", placeholder="Solicitante", disabled=True)
-    tp_desc = col1.number_input("Loja", step=None, max_value=299)
+    cod_loja = col1.number_input("Cod. Loja", step=None, max_value=299)
+    loja = col1.text_input("Loja")
     uploaded_file_1 = col1.file_uploader(label="Selecione um arquivo: 1", type=["csv", "txt", "xlsx", "pdf"])
     uploaded_file_2 = col1.file_uploader("Escolha um arquivo: 2", type=["csv", "txt", "xlsx", "pdf"])    
     class_servico = col1.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria'])
@@ -56,6 +57,7 @@ css = """
     background-color: red; /* Altere a cor para a cor desejada */
     color: white; /* Define a cor do texto no botão */
 }
+
 </style>
 """
 
