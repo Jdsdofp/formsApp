@@ -2,9 +2,10 @@ import streamlit as st
 import logging
 from logo import *
 from models import *
+from config import *
 import datetime
 import time
-import json
+
 
 st.header(body=" Registro de SC", anchor=False)
 col1, col2 = st.columns(2)
@@ -46,7 +47,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
         col1.markdown(javascript_code, unsafe_allow_html=True)
                 # Widget de entrada de data
 
-        data_atual = datetime.datetime.now()
+        data_atual = datetime.datetime.now(fuso_horario)
+        print(data_atual)
         data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
 
         data_abertura = st.text_input("Data de abertura: ", value=data_formatada, disabled=True)
@@ -106,13 +108,12 @@ with st.form("cadSolicitacao", clear_on_submit=True):
               
               if id_result:
 
-                  st.success(f"Registro cadastrado com sucesso ID: {id_result}")
-                  time.sleep(5)
-                 # Limpar a mensagem após 5 segundos
-                  st.experimental_rerun()
-                  
+                   st.success(f"Registro cadastrado com sucesso ID: {id_result}")
+                   time.sleep(5)
+                  # Limpar a mensagem após 5 segundos
+                   st.experimental_rerun()
               else:
-                  st.error("Erro ao registrar informações")
+                 st.error("Erro ao registrar informações")
         
     
 
