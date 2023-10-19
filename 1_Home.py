@@ -39,7 +39,7 @@ st.markdown(
             unsafe_allow_html=True
         )
 
-st.title("Formulario de abertura SCs", anchor=False)
+st.title("📊 Demonstrativo de abertura SCs", anchor=False)
 config_lay()
 
 # # # # # # # # # contagem de solicitaçoes de hoje # # # # # # # # #

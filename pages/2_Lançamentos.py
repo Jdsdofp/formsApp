@@ -7,7 +7,7 @@ import datetime
 import time
 
 
-st.header(body=" Registro de SC", anchor=False)
+st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
 

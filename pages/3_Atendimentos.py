@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 from st_aggrid import *
-import st_aggrid.grid_options_builder as gd
+from st_aggrid.grid_options_builder import GridOptionsBuilder
 from models import *
 
 scs_db = [documento for documento in col_solicitacao.find({"status": "aberto"})]
 
-st.subheader("☑ Atendimentos")
+st.subheader("📝 Atendimentos")
 
 if scs_db:
     df = pd.DataFrame(scs_db)
@@ -37,13 +37,42 @@ if scs_db:
     gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
     gb.configure_selection(selection_mode="single", use_checkbox=False)
     gb.configure_side_bar()
+    gb.configure_pagination("pagination")
     gridoptions = gb.build()
+
+    
+    custom_css = {
+        "#gridToolBar": {
+        "padding-bottom": "0px !important",
+        },
+        ".ag-root.ag-unselectable.ag-layout-normal": {"font-size": "13px !important",
+        "font-family": "Roboto, sans-serif !important;"},
+        ".ag-header-cell-text": {"color": "#495057 !important;"},
+        ".ag-theme-alpine .ag-ltr .ag-cell": {"color": "#444 !important;"},
+        ".ag-theme-alpine .ag-row-odd": {"background": "rgba(243, 247, 249, 0.3) !important;",
+        "border": "1px solid #eee !important;"},
+        ".ag-theme-alpine .ag-row-even": {"border-bottom": "1px solid #eee !important;"},
+        ".ag-theme-light button": {"font-size": "0 !important;", "width": "auto !important;", "height": "24px !important;",
+        "border": "1px solid #eee !important;", "margin": "4px 2px !important;",
+        "background": "#3162bd !important;", "color": "#fff !important;",
+        "border-radius": "3px !important;"},
+        ".ag-theme-light button:before": {"content": "'Confirm' !important","position": "relative !important",
+        "z-index": "1000 !important", "top": "0 !important",
+        "font-size": "12px !important", "left": "0 !important",
+        "padding": "4px !important"
+        },
+    }
+
+
+
+
 
     response = AgGrid(
         df,
         reload_data=True,
         height=500,
         gridOptions=gridoptions,
+        custom_css=custom_css,
         enable_enterprise_modules=True,
         update_mode=GridUpdateMode.MODEL_CHANGED,
         data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
