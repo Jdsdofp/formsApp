@@ -56,7 +56,6 @@ ocorrencias_hj = datasShr.count(data_especifica)
 # # # # # # # # # contagem de solicitações fechadas # # # # # # # # # #
 sc_fechada = [documento for documento in col_solicitacao.find({"status": "fechado"})]
 contagem_fechado = sum(1 for dado in sc_fechada if dado.get('status') == 'fechado')
-print(contagem_fechado)
 # # # # # # # # # FIM contagem de solicitações fechadas # # # # # # # # #
 
 # # # # # # # # # total de solicitações abertas # # # # # # # # # # # 
@@ -82,14 +81,15 @@ with col4:
             unsafe_allow_html=True
         )
 
-        #tabela de registros
+        #tabela de registros    
 st.divider()
-st.markdown("<p style='color: #555555;font-family: 'Roboto Mono', monospace;'>Lista de registros</p>", unsafe_allow_html=True)
+st.markdown("<h4 style='color: #D24545; font-family: 'Roboto Mono', monospace;'>Lista de registros</h4>", unsafe_allow_html=True)
 st.divider()
 scs_db = [documento for documento in col_solicitacao.find()]
 
 if scs_db:
     df = pd.DataFrame(scs_db)
+
 
     df = df.rename(columns={
         'solicitante': 'Solicitante',
@@ -106,13 +106,12 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2']
-    df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
+    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2', 'nr_solicitacao']
+    #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
     cols.insert(0, cols.pop(cols.index('cod_registro')))
     df = df[cols]
-    st.markdown("""<h5 style='color: #D24545'>Lista de registros</h5>""", unsafe_allow_html=True)
 
     # Mudar a cor do cabeçalho da tabela
     def set_background_color(s, color):
@@ -129,10 +128,12 @@ if scs_db:
 
     # Aplicar a cor condicional às linhas
     styled_df = df.style.apply(color_rows, axis=1)
-
+    
 
     # Mostrar a tabela no Streamlit
-    st.write(styled_df)
+    #st.write(styled_df, unsafe_allow_html=True)
+    #st.markdown(styled_df)
+    st.dataframe(styled_df, use_container_width=True, hide_index=True)
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
