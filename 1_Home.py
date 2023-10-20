@@ -6,7 +6,7 @@ import datetime
 
 
 # Cabeçalho personalizados
-
+st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.markdown(
             """
             <style>
@@ -133,7 +133,7 @@ if scs_db:
     # Mostrar a tabela no Streamlit
     #st.write(styled_df, unsafe_allow_html=True)
     #st.markdown(styled_df)
-    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+    st.dataframe(styled_df, use_container_width=True, hide_index=True, height=350)
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
