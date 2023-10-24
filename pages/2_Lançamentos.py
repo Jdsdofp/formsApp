@@ -84,8 +84,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
     btn_cadastrar = st.form_submit_button("Cadastrar", use_container_width=True)
 
     if btn_cadastrar:
-        with st.spinner('Cadastrando...'):
-                time.sleep(5)
+        # with st.spinner('Cadastrando...'):
+        #         time.sleep(5)
         if solcitante == "" or cod_loja == None or solcitante == None or "" or forncedor == "" or None or nr_chamado=="" or None or loja == None or "":
             st.warning("Favor preencha todos os campos")
 

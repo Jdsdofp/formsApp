@@ -7,6 +7,10 @@ from models import *
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 scs_db = [documento for documento in col_solicitacao.find({"status": "aberto"})]
 
+def find_open_sc():
+    return [documento for documento in col_solicitacao.find({"status": "aberto"})]
+
+scs_db=find_open_sc()
 st.subheader("📝 Atendimentos")
 
 if scs_db:
@@ -105,17 +109,21 @@ else:
 
 if 'data_dict' in locals():
     if len(data_dict) > 0:
-            form = st.form(key="submitted",clear_on_submit=True)
-            cd_rgs=form.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
-            stts_txt=form.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
-            stts=form.selectbox(label="Fechamento: ", options=["fechado"])
-        
-            nr_cmd=form.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
-            nr_solic=form.text_input("Nº Solicitação: ")
+            with st.form(key="submitted"):
+                col1, col2 = st.columns(2)
+                with col1:
+                    cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
+                    stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
+                    stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
+                
+                with col2:
+                    nr_cmd=col2.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
+                    nr_solic=col2.text_input("Nº Solicitação: ")
 
-            submitted = form.form_submit_button(label="Lançar", use_container_width=True)
-            
+                submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True)
+
             if submitted:
+                find_open_sc()
                 filterID = int(cd_rgs)
                 filter_criteria={'cod_registro': filterID}
                 
@@ -126,19 +134,22 @@ if 'data_dict' in locals():
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:
-                    st.info(f"Status de registro fechado com sucesso {resultUpdate.upserted_id}")
+                    st.info(f"Status de registro fechado com sucesso")
 
     else:
             
-            col1 = form = st.form(key="submitted",clear_on_submit=True)
-            cd_rgs=form.text_input(label="Cod. Registro", disabled=True, value="")
-            stts_txt=form.text_input("Status: ", disabled=True, value="")
-            stts=form.selectbox(label="Fechamento: ", disabled=True, options=[""])
-        
-            nr_cmd=form.text_input("Nº Chamado: ", disabled=True, value="")
-            nr_solic=form.text_input("Nº Solicitação: ")
+        with st.form(key="submitted",clear_on_submit=True):
+                col1, col2 = st.columns(2)
+                with col1:
+                    cd_rgs=col1.text_input(label="Cod. Registro", disabled=True, value="")
+                    stts_txt=col1.text_input(label="Status: ", disabled=True, value="")
+                    stts=col1.selectbox(label="Fechamento: ", disabled=True, options=[""])
+                
+                with col2:
+                    nr_cmd=col2.text_input("Nº Chamado: ", disabled=True, value="")
+                    nr_solic=col2.text_input("Nº Solicitação:", disabled=True)
 
-            submitted = form.form_submit_button(label="Lançar", disabled=True, use_container_width=True)
+                submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True, disabled=True)
 
 else:
     pass
