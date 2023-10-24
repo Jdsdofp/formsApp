@@ -6,10 +6,9 @@ from models import *
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 
-def find_open_sc():
-    return [documento for documento in col_solicitacao.find({"status": "aberto"})]
 
-scs_db=find_open_sc()
+scs_db=[documento for documento in col_solicitacao.find({"status": "aberto"})]
+
 st.subheader("📝 Atendimentos")
 
 if scs_db:
@@ -122,7 +121,6 @@ if 'data_dict' in locals():
                 submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True)
 
             if submitted:
-                find_open_sc()
                 filterID = int(cd_rgs)
                 filter_criteria={'cod_registro': filterID}
                 
@@ -151,4 +149,4 @@ if 'data_dict' in locals():
                 submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True, disabled=True)
 
 else:
-    print("A variável 'data_dict' não está definida.")
+    pass
