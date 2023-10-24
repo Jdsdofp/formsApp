@@ -4,6 +4,7 @@ from st_aggrid import *
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from models import *
 
+st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 scs_db = [documento for documento in col_solicitacao.find({"status": "aberto"})]
 
 st.subheader("📝 Atendimentos")
@@ -140,4 +141,4 @@ if 'data_dict' in locals():
             submitted = form.form_submit_button(label="Lançar", disabled=True, use_container_width=True)
 
 else:
-    print("A variável 'data_dict' não está definida.")
+    pass

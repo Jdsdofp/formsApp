@@ -6,7 +6,7 @@ from config import *
 import datetime
 import time
 
-
+st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
@@ -16,7 +16,7 @@ cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),ste
 
 
 lojas={"nr_loja": cod_loja}
-projecao = {"_id": 0, "nr_loja": 0}
+projecao = {"_id": 0, "nr_loja": 0} 
 result_filial = col_filial.find_one(lojas, projecao)
 
 

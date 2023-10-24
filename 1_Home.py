@@ -6,7 +6,7 @@ import datetime
 
 
 # Cabeçalho personalizados
-
+st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.markdown(
             """
             <style>
