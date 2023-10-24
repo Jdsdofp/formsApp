@@ -16,7 +16,7 @@ cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),ste
 
 
 lojas={"nr_loja": cod_loja}
-projecao = {"_id": 0, "nr_loja": 0}
+projecao = {"_id": 0, "nr_loja": 0} 
 result_filial = col_filial.find_one(lojas, projecao)
 
 
