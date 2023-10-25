@@ -59,7 +59,6 @@ PyYAML
 referencing
 requests
 rich
-rpds-py
 rsa
 scipy
 seaborn
