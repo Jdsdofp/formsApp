@@ -13,7 +13,7 @@ st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
 # Adicione o seu token do Dropbox aqui
-TOKEN = "sl.BoklXsnVZI8qLT-zMCttTP_ZGNULyIrS3jDrnIv_tGBGpu1E2xRmB4Z_J4VPzibJNXl8IprT6VhUxi1awCErbEzzvf3oexrrsGkchxWz8P1fp6F5Y3oN0xXXGIyf49L3c0dlvbp5-ZqBbKoq-apQ2RI"
+TOKEN = "sl.BokJAPlnM8-g9AEd1SizRnnWbsuwlr4ILrvxgzIPwYqzSfDZ9mQ0OnhQU28K_NEVuKXrMO8SCZowGXNEws5RY9w2bObVZ958UE2mRPDzncsypy4rmsMMuxtzbMNLTgmGUuAQpenviLJETAfEV8hE8bw"
 # Autenticação com a API do Dropbox
 dbx = dropbox.Dropbox(TOKEN)
 
