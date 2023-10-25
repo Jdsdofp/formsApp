@@ -1,4 +1,8 @@
 import streamlit as st
+import os
+import base64
+import tempfile
+import dropbox
 from logo import *
 from models import *
 from config import *
@@ -8,7 +12,10 @@ st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDr
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
-
+# Adicione o seu token do Dropbox aqui
+TOKEN = "sl.BoklXsnVZI8qLT-zMCttTP_ZGNULyIrS3jDrnIv_tGBGpu1E2xRmB4Z_J4VPzibJNXl8IprT6VhUxi1awCErbEzzvf3oexrrsGkchxWz8P1fp6F5Y3oN0xXXGIyf49L3c0dlvbp5-ZqBbKoq-apQ2RI"
+# Autenticação com a API do Dropbox
+dbx = dropbox.Dropbox(TOKEN)
 
 cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0)
 
@@ -25,8 +32,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             loja = st.text_input("Loja", disabled=True)
         else:
             loja = st.text_input("Loja", result_filial["nome_loja"],disabled=True)
-        uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["csv", "txt", "xlsx", "pdf"], on_change=None)
-        uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["csv", "txt", "xlsx", "pdf"])    
+        uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
+        uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])    
         class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria'], on_change=None)
 
         javascript_code = """
@@ -82,6 +89,45 @@ with st.form("cadSolicitacao", clear_on_submit=True):
     btn_cadastrar = st.form_submit_button("Cadastrar", use_container_width=True)
 
     if btn_cadastrar:
+        # Função para obter o link de retorno
+        def get_shared_link(file_path):
+            try:
+                shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file_path)
+                return shared_link_metadata.url
+            except dropbox.exceptions.ApiError as e:
+                if e.error.is_shared_link_already_exists():
+                    links = dbx.sharing_list_shared_links(file_path)
+                    return links.links[0].url
+                else:
+                    raise
+
+        if uploaded_file_1 is not None:
+            temp_file1 = tempfile.NamedTemporaryFile(delete=False)
+            try:
+                temp_file1.write(uploaded_file_1.getvalue())
+                temp_file1.close()
+                with open(temp_file1.name, "rb") as f:
+                    file_path = "/{}".format(uploaded_file_1.name)
+                    dbx.files_upload(f.read(), file_path, mute=True)
+                    link1 = get_shared_link(file_path)
+                    st.write(f"Link de download do primeiro arquivo: {link1}")
+            finally:
+                os.unlink(temp_file1.name)
+
+        if uploaded_file_2 is not None:
+            temp_file2 = tempfile.NamedTemporaryFile(delete=False)
+            try:
+                temp_file2.write(uploaded_file_2.getvalue())
+                temp_file2.close()
+                with open(temp_file2.name, "rb") as f:
+                    file_path = "/{}".format(uploaded_file_2.name)
+                    dbx.files_upload(f.read(), file_path, mute=True)
+                    link2 = get_shared_link(file_path)
+                    st.write(f"Link de download do segundo arquivo: {link2}")
+            finally:
+                os.unlink(temp_file2.name)
+
+
         # with st.spinner('Cadastrando...'):
         #         time.sleep(5)
         if solcitante == "" or cod_loja == None or solcitante == None or "" or forncedor == "" or None or nr_chamado=="" or None or loja == None or "":
@@ -93,8 +139,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                    "cod_registro": cod_registro+1, 
                    "cod_loja": cod_loja,
                    "loja": loja,
-                   "arquivo_1": uploaded_file_1,
-                   "arquivo_2": uploaded_file_2,
+                   "arquivo_1":  link1,
+                   "arquivo_2":  link2,
                    "class_servico": class_servico,
                    "data_abertura": data_abertura,
                    "data_solicitacao": str(data_solicitacao.strftime("%d/%m/%Y")),

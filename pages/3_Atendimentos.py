@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import *
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+
 from models import *
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
@@ -30,7 +31,7 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2', 'gr_complexidade', 'forncedor','desc_servico','Solicitante']
+    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','desc_servico','Solicitante']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
@@ -122,6 +123,13 @@ if 'data_dict' in locals():
                          stts=col1.selectbox(label="Fechamento: ", disabled=True,options=["-"])
                     else:
                          stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
+                    if data_dict[0]['arquivo_1'] and data_dict[0]['arquivo_2']:
+                        col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='background: #F36B6B; color: white; padding: 2px; font-size: 15px;'>Arquivo 1</a>", unsafe_allow_html=True) 
+                        col1.markdown(f"<a href='{data_dict[0]['arquivo_2']}' style='background: #F36B6B; color: white; padding: 2px; font-size: 15px;'>Arquivo 2</a>", unsafe_allow_html=True)
+                    else:
+                         pass
+
+
 
                 with col2:
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
@@ -142,7 +150,7 @@ if 'data_dict' in locals():
                          nr_oc=col2.number_input("Nº OC: ",step=0)
 
                     
-                    
+
                 submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True)
 
             if submitted:
