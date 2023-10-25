@@ -1,4 +1,5 @@
 import streamlit as st
+from dotenv import load_dotenv
 import os
 import base64
 import tempfile
@@ -8,12 +9,13 @@ from models import *
 from config import *
 import datetime
 
+load_dotenv()
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
 # Adicione o seu token do Dropbox aqui
-TOKEN = "sl.BokJAPlnM8-g9AEd1SizRnnWbsuwlr4ILrvxgzIPwYqzSfDZ9mQ0OnhQU28K_NEVuKXrMO8SCZowGXNEws5RY9w2bObVZ958UE2mRPDzncsypy4rmsMMuxtzbMNLTgmGUuAQpenviLJETAfEV8hE8bw"
+TOKEN = os.getenv('TOKEN_DPB')
 # Autenticação com a API do Dropbox
 dbx = dropbox.Dropbox(TOKEN)
 
