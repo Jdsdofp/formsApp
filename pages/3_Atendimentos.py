@@ -7,7 +7,8 @@ from models import *
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 
 
-scs_db=[documento for documento in col_solicitacao.find({"status": "aberto"})]
+scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado']}})]
+
 
 st.subheader("📝 Atendimentos")
 
@@ -23,8 +24,9 @@ if scs_db:
         'data_solicitacao': 'Data de Solicitação',
         'tp_urg': 'Tipo de Urgência',
         'nr_chamado': 'Número do Chamado',
+        'oc': 'OC',
         'status': 'Status',
-        'nr_solicitacao': 'Nº Solicitação'
+        'nr_solicitacao': 'Nº Solicitação',
     })
 
     # Remover colunas indesejadas
@@ -84,8 +86,7 @@ if scs_db:
         use_checkbox=True)
 
 
-    data_dict=response["selected_rows"]
-         
+    data_dict=response["selected_rows"]  
          # Imprimindo os resultados
 
 
@@ -102,7 +103,9 @@ else:
         'Tipo de Urgência',
         'Grau de Complexidade',
         'Número do Chamado',
-        'Status','Descrição Serviço'
+        'OC',
+        'Status',
+        'Descrição Serviço'
     ])
 
 if 'data_dict' in locals():
@@ -112,22 +115,45 @@ if 'data_dict' in locals():
                 with col1:
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
                     stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
-                    stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
-                
+                    
+                    if data_dict[0]['Status'] == 'fechado':
+                        stts=col1.selectbox(label="Fechamento: ", options=["finalizada"])
+                    elif data_dict[0]['Status'] == 'finalizada':
+                         stts=col1.selectbox(label="Fechamento: ", disabled=True,options=["-"])
+                    else:
+                         stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
+
                 with col2:
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
-                    nr_solic=col2.text_input("Nº Solicitação: ")
+                    
 
+                    if data_dict[0]['Nº Solicitação']:
+                        nr_solic=col2.text_input("Nº Solicitação: ", disabled=True, value=data_dict[0]['Nº Solicitação'])
+                    else:
+                        nr_solic=col2.text_input("Nº Solicitação: ")
+                    
+
+
+                    if data_dict[0]['Status'] == 'aberto':
+                         nr_oc=col2.number_input("Nº OC: ", disabled=True)
+                    elif data_dict[0]['Status'] == 'finalizada':
+                         nr_oc=col2.number_input("Nº OC: ", data_dict[0]['OC'],  disabled=True)
+                    else:
+                         nr_oc=col2.number_input("Nº OC: ",step=0)
+
+                    
+                    
                 submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True)
 
             if submitted:
                 filterID = int(cd_rgs)
                 filter_criteria={'cod_registro': filterID}
                 
+                new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
                 new_stts=str(stts)
 
-                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts}}
+                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:

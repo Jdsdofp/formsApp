@@ -1,10 +1,8 @@
 import streamlit as st
-import streamlit.components.v1 as components
 from logo import *
 from models import *
 from config import *
 import datetime
-import time
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
@@ -106,7 +104,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                    "gr_complexidade": gr_complexidade,
                    "nr_chamado": nr_chamado,
                    "nr_solicitacao": 0,
-                   "status": "aberto"
+                   "status": "aberto",
+                   "oc": 0
                   }
             
               registro = col_solicitacao.insert_one(data)

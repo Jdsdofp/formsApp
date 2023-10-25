@@ -101,12 +101,13 @@ if scs_db:
         'tp_urg': 'Tipo de Urgência',
         'gr_complexidade': 'Grau de Complexidade',
         'nr_chamado': 'Número do Chamado',
+        'nr_solicitacao':'Solicitação',
         'status': 'Status',
         'desc_servico': 'Descrição Serviço'
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2', 'nr_solicitacao']
+    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2',]
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
@@ -123,6 +124,8 @@ if scs_db:
     def color_rows(row):
         if row['Status'] == 'aberto':
             return ['background-color: #EF8989'] * len(row)
+        elif row['Status'] == 'fechado':
+            return ['background-color: #FFF3CE'] * len(row)
         else:
             return ['background-color: white'] * len(row)
 
