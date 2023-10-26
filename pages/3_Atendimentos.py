@@ -21,6 +21,7 @@ if scs_db:
         'solicitante': 'Solicitante',
         'cod_loja': 'Código da Loja',
         'loja': 'Loja',
+        'desc_servico': 'Descrição Serviço',
         'data_abertura': 'Data de Abertura',
         'data_solicitacao': 'Data de Solicitação',
         'tp_urg': 'Tipo de Urgência',
@@ -31,7 +32,7 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','desc_servico','Solicitante']
+    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','Solicitante']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
