@@ -1,3 +1,4 @@
+mega
 et-xmlfile
 fonttools
 gitdb
