@@ -1,4 +1,4 @@
-mega
+mega.py
 et-xmlfile
 fonttools
 gitdb
