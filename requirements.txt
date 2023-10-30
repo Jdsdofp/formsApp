@@ -1,6 +1,4 @@
-dropbox
 et-xmlfile
-extra-streamlit-components
 fonttools
 gitdb
 GitPython
@@ -43,7 +41,6 @@ pyasn1-modules
 pydantic
 pydantic_core
 pydeck
-PyDrive
 Pygments
 pymongo
 Pympler
