@@ -1,23 +1,18 @@
 import streamlit as st
 from dotenv import load_dotenv
 import os
-import base64
 import tempfile
-import dropbox
 from logo import *
 from models import *
 from config import *
+from mega import Mega
 import datetime
+import time
 
 load_dotenv()
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
-
-# Adicione o seu token do Dropbox aqui
-TOKEN = os.getenv('TOKEN_DPB')
-# Autenticação com a API do Dropbox
-dbx = dropbox.Dropbox(TOKEN)
 
 cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0)
 
@@ -88,79 +83,88 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             )
 
     cod_registro = col_solicitacao.count_documents({}) 
+    
     btn_cadastrar = st.form_submit_button("Cadastrar", use_container_width=True)
 
     if btn_cadastrar:
-        # Função para obter o link de retorno
-        def get_shared_link(file_path):
-            try:
-                shared_link_metadata = dbx.sharing_create_shared_link_with_settings(file_path)
-                return shared_link_metadata.url
-            except dropbox.exceptions.ApiError as e:
-                if e.error.is_shared_link_already_exists():
-                    links = dbx.sharing_list_shared_links(file_path)
-                    return links.links[0].url
+    
+        with st.spinner('Cadastrando...') as loads:
+            mega = Mega()
+
+            def fazer_upload_mega(file_path):
+                email = 'jdsdofp@gmail.com'
+                password = '960012Jds'
+                m = mega.login(email, password)
+                return m.upload(file_path)
+
+            def get_shared_link_mega(upld):
+                return mega.get_upload_link(upld)
+
+            links = []
+
+            start_time = time.time()
+
+            if uploaded_file_1 is not None:
+                temp_file1 = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf" if uploaded_file_1.type == "application/pdf" else ".xlsx")
+                try:
+                    temp_file1.write(uploaded_file_1.getvalue())
+                    temp_file1.close()
+                    upld1 = fazer_upload_mega(temp_file1.name)
+                    link1 = get_shared_link_mega(upld1)
+                    if link1 is not None:
+                        links.append(link1)
+                    else:
+                        links.append('')
+                finally:
+                    os.unlink(temp_file1.name)
+
+            if uploaded_file_2 is not None:
+                temp_file2 = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf" if uploaded_file_2.type == "application/pdf" else ".xlsx")
+                try:
+                    temp_file2.write(uploaded_file_2.getvalue())
+                    temp_file2.close()
+                    upld2 = fazer_upload_mega(temp_file2.name)
+                    link2 = get_shared_link_mega(upld2)
+                    if link2 is not None:
+                        links.append(link2)
+                    else:
+                        links.append('')
+                finally:
+                    os.unlink(temp_file2.name)
+
+            if solcitante == "" or cod_loja is None or solcitante is None or forncedor == "" or forncedor is None or nr_chamado == "" or nr_chamado is None or loja is None:
+                st.warning("Favor preencha todos os campos")
+            else:
+                data = {
+                    "solicitante": str(solcitante).capitalize(),
+                    "cod_registro": cod_registro + 1,
+                    "cod_loja": cod_loja,
+                    "loja": loja,
+                    "arquivo_1": links[0] if links else "",
+                    "arquivo_2": links[1] if len(links) > 1 else "",
+                    "class_servico": class_servico,
+                    "data_abertura": data_abertura,
+                    "data_solicitacao": str(data_solicitacao.strftime("%d/%m/%Y")),
+                    "desc_servico": desc_servico,
+                    "forncedor": str(forncedor).upper(),
+                    "tp_urg": tp_urg,
+                    "gr_complexidade": gr_complexidade,
+                    "nr_chamado": nr_chamado,
+                    "nr_solicitacao": 0,
+                    "status": "aberto",
+                    "oc": 0,
+                    "NF": ""
+                }
+
+                registro = col_solicitacao.insert_one(data)
+                result = col_solicitacao.find_one({"_id": registro.inserted_id})
+                id_result = result["cod_registro"]
+
+                end_time = time.time()
+                duration = end_time - start_time
+
+                if id_result:
+                    st.success(f"Registro cadastrado com sucesso ID: {id_result}")
                 else:
-                    raise
-
-        if uploaded_file_1 is not None:
-            temp_file1 = tempfile.NamedTemporaryFile(delete=False)
-            try:
-                temp_file1.write(uploaded_file_1.getvalue())
-                temp_file1.close()
-                with open(temp_file1.name, "rb") as f:
-                    file_path = "/{}".format(uploaded_file_1.name)
-                    dbx.files_upload(f.read(), file_path, mute=True)
-                    link1 = get_shared_link(file_path)
-                    st.write(f"Link de download do primeiro arquivo: {link1}")
-            finally:
-                os.unlink(temp_file1.name)
-
-        if uploaded_file_2 is not None:
-            temp_file2 = tempfile.NamedTemporaryFile(delete=False)
-            try:
-                temp_file2.write(uploaded_file_2.getvalue())
-                temp_file2.close()
-                with open(temp_file2.name, "rb") as f:
-                    file_path = "/{}".format(uploaded_file_2.name)
-                    dbx.files_upload(f.read(), file_path, mute=True)
-                    link2 = get_shared_link(file_path)
-                    st.write(f"Link de download do segundo arquivo: {link2}")
-            finally:
-                os.unlink(temp_file2.name)
-
-
-        # with st.spinner('Cadastrando...'):
-        #         time.sleep(5)
-        if solcitante == "" or cod_loja == None or solcitante == None or "" or forncedor == "" or None or nr_chamado=="" or None or loja == None or "":
-            st.warning("Favor preencha todos os campos")
-
-        else:
-              data = {
-                  "solicitante": str(solcitante).capitalize(),
-                   "cod_registro": cod_registro+1, 
-                   "cod_loja": cod_loja,
-                   "loja": loja,
-                   "arquivo_1":  link1,
-                   "arquivo_2":  link2,
-                   "class_servico": class_servico,
-                   "data_abertura": data_abertura,
-                   "data_solicitacao": str(data_solicitacao.strftime("%d/%m/%Y")),
-                   "desc_servico": desc_servico,
-                   "forncedor": str(forncedor).upper(),
-                   "tp_urg": tp_urg,
-                   "gr_complexidade": gr_complexidade,
-                   "nr_chamado": nr_chamado,
-                   "nr_solicitacao": 0,
-                   "status": "aberto",
-                   "oc": 0
-                  }
-            
-              registro = col_solicitacao.insert_one(data)
-              result = col_solicitacao.find_one({"_id": registro.inserted_id})
-              id_result = result["cod_registro"]
-              
-              if id_result:
-                    st.success(f"Registro cadastrado com sucesso ID: {id_result}")                 
-              else:
-                 st.error("Erro ao registrar informações")
+                    st.error("Erro ao registrar informações")
+  

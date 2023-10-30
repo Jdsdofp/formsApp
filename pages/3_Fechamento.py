@@ -5,13 +5,14 @@ from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 from models import *
 
-st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
+st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico", layout="wide")
 
 
-scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado']}})]
+scs_db=[documento for documento in col_solicitacao.find({'NF': ''})]
 
 
-st.subheader("📝 Atendimentos")
+st.subheader("📝 Fechamento")
+st.markdown("<p> ° Finalização de processo de SCs com NFs geradas<p>", unsafe_allow_html=True)
 
 if scs_db:
     df = pd.DataFrame(scs_db)
@@ -32,7 +33,7 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','Solicitante']
+    colunas_para_remover = ['_id', 'class_servico','gr_complexidade', 'forncedor','Solicitante','Tipo de Urgência', 'arquivo_1', 'arquivo_2', 'Descrição Serviço']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
@@ -116,22 +117,8 @@ if 'data_dict' in locals():
                 col1, col2 = st.columns(2)
                 with col1:
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
-                    stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
-                    
-                    if data_dict[0]['Status'] == 'fechado':
-                        stts=col1.selectbox(label="Fechamento: ", options=["finalizada"])
-                    elif data_dict[0]['Status'] == 'finalizada':
-                         stts=col1.selectbox(label="Fechamento: ", disabled=True,options=["-"])
-                    else:
-                         stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
-                    if data_dict[0]['arquivo_1'] and data_dict[0]['arquivo_2']:
-                        col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 1</a>", unsafe_allow_html=True) 
-                        col1.markdown(f"<a href='{data_dict[0]['arquivo_2']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 2</a>", unsafe_allow_html=True)
-                    else:
-                         pass
-
-
-
+                    nf=col1.text_input(label="Nº NF", placeholder="Informe número da NF")
+                
                 with col2:
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
                     
@@ -152,7 +139,7 @@ if 'data_dict' in locals():
 
                     
 
-                submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True)
+                submitted = st.form_submit_button(label="Fechar :heavy_check_mark:", type="primary", use_container_width=True)
 
             if submitted:
                 filterID = int(cd_rgs)
@@ -160,9 +147,8 @@ if 'data_dict' in locals():
                 
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
-                new_stts=str(stts)
 
-                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
+                new_values={'$set':{'NF': nf}}
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:
@@ -181,7 +167,7 @@ if 'data_dict' in locals():
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True, value="")
                     nr_solic=col2.text_input("Nº Solicitação:", disabled=True)
 
-                submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True, disabled=True)
+                submitted = st.form_submit_button(label="Fechar :heavy_check_mark:", type="primary", use_container_width=True, disabled=True)
 
 else:
     pass
