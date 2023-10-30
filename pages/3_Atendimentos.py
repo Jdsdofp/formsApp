@@ -124,9 +124,12 @@ if 'data_dict' in locals():
                          stts=col1.selectbox(label="Fechamento: ", disabled=True,options=["-"])
                     else:
                          stts=col1.selectbox(label="Fechamento: ", options=["fechado"])
-                    if data_dict[0]['arquivo_1'] and data_dict[0]['arquivo_2']:
-                        col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 1</a>", unsafe_allow_html=True) 
+                    
+                    if len(data_dict[0]['arquivo_1']) and len(data_dict[0]['arquivo_2']):
+                        col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 1</a>", unsafe_allow_html=True)
                         col1.markdown(f"<a href='{data_dict[0]['arquivo_2']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 2</a>", unsafe_allow_html=True)
+                    elif len(data_dict[0]['arquivo_1']):
+                         col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo 1</a>", unsafe_allow_html=True)
                     else:
                          pass
 
