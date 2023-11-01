@@ -19,7 +19,7 @@ cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),ste
 
 lojas={"nr_loja": cod_loja}
 projecao = {"_id": 0, "nr_loja": 0}
-result_filial = col_filial.find_one(lojas, projecao)
+result_filial = col_filiais.find_one(lojas, projecao)
 
 
 with st.form("cadSolicitacao", clear_on_submit=True):
@@ -149,7 +149,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "forncedor": str(forncedor).upper(),
                     "tp_urg": tp_urg,
                     "gr_complexidade": gr_complexidade,
-                    "nr_chamado": nr_chamado,
+                    "nr_chamado": str(nr_chamado).upper(),
                     "nr_solicitacao": 0,
                     "status": "aberto",
                     "oc": 0,
