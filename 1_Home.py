@@ -1,12 +1,18 @@
 import streamlit as st
 from logo import *
 import pandas as pd
+import os
 from models import *
 import datetime
 
 
+
+
 # Cabeçalho personalizados
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
+username = os.getlogin()
+st.write(f"O nome do usuário do PC é: {username}")
+
 st.markdown(
             """
             <style>
