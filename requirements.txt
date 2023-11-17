@@ -1,4 +1,5 @@
 mega.py
+folium
 et-xmlfile
 fonttools
 gitdb
