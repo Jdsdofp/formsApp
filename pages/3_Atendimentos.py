@@ -14,7 +14,16 @@ scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['abe
 st.subheader("📝 Atendimentos")
 
 if scs_db:
-    df = pd.DataFrame(scs_db)
+    df = pd.DataFrame(scs_db).sort_values(by='status')
+    # Adicione uma coluna com ícones condicionais
+    def row_icons(row):
+        if row["status"] == "aberto":
+            return pd.Series("🔴", index=["#"])
+        else:
+            return pd.Series("", index=["#"])
+
+    df["#"] = df.apply(row_icons, axis=1)
+
 
 
     df = df.rename(columns={
@@ -32,14 +41,14 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','Solicitante']
+    colunas_para_remover = ['_id', 'gr_complexidade', 'forncedor','Solicitante', 'NF']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
     cols.insert(0, cols.pop(cols.index('cod_registro')))
     df = df[cols]
 
- 
+    df = df[["#"] + [col for col in df.columns if col != "#"]]
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
     gb.configure_selection(selection_mode="single", use_checkbox=False)
@@ -70,8 +79,7 @@ if scs_db:
         },
     }
 
-
-
+  
 
 
     response = AgGrid(
@@ -170,6 +178,7 @@ if 'data_dict' in locals():
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:
                     st.info(f"Status de registro fechado com sucesso")
+                    
 
     else:
             

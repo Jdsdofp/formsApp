@@ -8,7 +8,7 @@ from models import *
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico", layout="wide")
 
 
-scs_db=[documento for documento in col_solicitacao.find({'NF': ''})]
+scs_db=[documento for documento in col_solicitacao.find({'status': 'finalizada'})]
 
 
 st.subheader("📝 Fechamento")
@@ -16,7 +16,6 @@ st.markdown("<p> ° Finalização de processo de SCs com NFs geradas<p>", unsafe
 
 if scs_db:
     df = pd.DataFrame(scs_db)
-
 
     df = df.rename(columns={
         'solicitante': 'Solicitante',

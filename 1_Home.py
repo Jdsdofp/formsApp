@@ -2,6 +2,7 @@ import streamlit as st
 from logo import *
 import pandas as pd
 import os
+from config import *
 from models import *
 import datetime
 
@@ -47,11 +48,13 @@ st.title("📊 Demonstrativo de abertura SCs", anchor=False)
 config_lay()
 
 # # # # # # # # # contagem de solicitaçoes de hoje # # # # # # # # #
-dataAbertura=datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+data_atual = datetime.datetime.now(fuso_horario)
+dataAbertura = data_atual.strftime("%d/%m/%Y %H:%M:%S")
+
 sc_aberta = [documento for documento in col_solicitacao.find({"status": "aberto"})]
 datas = [dado['data_abertura'] for dado in sc_aberta]
 datasShr = [data_hora.split(' ')[0] for data_hora in datas]
-data_especifica = datetime.datetime.now().strftime("%d/%m/%Y")
+data_especifica = data_atual.strftime("%d/%m/%Y")
 ocorrencias_hj = datasShr.count(data_especifica)
 
 # # # # # # # # # FIM contagem de solicitaçoes de hoje # # # # # # # # #
@@ -66,20 +69,30 @@ contagem_fechado = sum(1 for dado in sc_fechada if dado.get('status') == 'fechad
 total_registros = col_solicitacao.count_documents({}) 
 # # # # # # # # # FIM total de solicitações abertas # # # # # # # # # 
 
+
+# # # # # # # # # contagem de solicitações finalizadas # # # # # # # # # #
+sc_finalizada = [documento for documento in col_solicitacao.find({"status": "finalizada"})]
+contagem_finalizada = sum(1 for dado in sc_finalizada if dado.get('status') == 'finalizada')
+# # # # # # # # # FIM contagem de solicitações finalizadas # # # # # # # # #
+
+
 # # # # # # # # contagem de chamados abertos no total geral # # # # # # # # 
 sc_tt_aberto = [documento for documento in col_solicitacao.find({"status": "aberto"})]
 contagem_tt_aberto = sum(1 for dado in sc_tt_aberto if dado.get('status') == 'aberto')
 # # # # # # # # FIM contagem de chamados abertos no total geral # # # # # # # 
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
-    col1.metric(label="Aberto Hoje",value=ocorrencias_hj, help="Numero de Solicitações que foram abertas hoje", delta="+1")
+    col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj, delta="+1")
 with col2:
-    col2.metric(label="Total Aberto",value=contagem_tt_aberto, help="Total de solicitações abertas", delta=f"+{ocorrencias_hj}")
+    col2.metric(label="Total Aberto", help="Total de solicitações abertas", value=contagem_tt_aberto, delta=f"+{ocorrencias_hj}")
 with col3:
-    col3.metric(label="Fechado",value=contagem_fechado, help="Numero de Solicitações fechadas", delta="-2")
+    col3.metric(label="Fechado", help="Número de Solicitações fechadas", value=contagem_fechado, delta="-2")
 with col4:
-    col4.markdown(
+    col4.metric(label="Finalizada", help="Solicitações com OCs já emitidas",value=contagem_finalizada, delta="-2")
+
+with col5:
+    col5.markdown(
             f"<p style='margin: 1px; color: #6E6F6E'>Total Geral</p>"
             f"<div style='background-color: #F5EEEF; border-radius: 20px; padding: 10px; height: 80px; width: 60%; box-shadow: 1px 1px 10px #D3DBD6; border: solid #D3DBD6 1px; font-size: 35px;'>{total_registros}</div>",
             unsafe_allow_html=True
@@ -92,7 +105,7 @@ st.divider()
 scs_db = [documento for documento in col_solicitacao.find()]
 
 if scs_db:
-    df = pd.DataFrame(scs_db)
+    df = pd.DataFrame(scs_db).sort_values(by='status')
 
 
     df = df.rename(columns={
