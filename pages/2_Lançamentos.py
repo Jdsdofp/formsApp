@@ -9,14 +9,23 @@ from mega import Mega
 import datetime
 import time
 
+
+
 load_dotenv()
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
-cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0)
+def clear_text_inputs():
+    st.session_state["solicitante_key"] = ""
+    st.session_state["cod_loja_key"] = 0
+    st.session_state["class_servico_key"] = []
+    st.session_state["desc_servico_key"] = ""
+    st.session_state["fornecedor_key"] = ""
+    st.session_state["tp_urg_key"] = "NÃO"
+    st.session_state["nr_chamado_key"] = ""
 
-
+cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0, key="cod_loja_key")
 lojas={"nr_loja": cod_loja}
 projecao = {"_id": 0, "nr_loja": 0}
 result_filial = col_filiais.find_one(lojas, projecao)
@@ -24,14 +33,14 @@ result_filial = col_filiais.find_one(lojas, projecao)
 
 with st.form("cadSolicitacao", clear_on_submit=True):
     with col1:
-        solcitante = st.text_input("Solicitante *", placeholder="Solicitante")
+        solcitante = st.text_input("Solicitante *", key="solicitante_key", placeholder="Solicitante")
         if result_filial==None:
             loja = st.text_input("Loja", disabled=True)
         else:
-            loja = st.text_input("Loja", result_filial["nome_loja"],disabled=True)
+            loja = st.text_input("Loja", result_filial["nome_loja"], disabled=True)
         uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
         uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])    
-        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], on_change=None)
+        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', ''], key="class_servico_key",on_change=None)
 
         javascript_code = """
                 <script>
@@ -51,7 +60,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                 """
 
         col1.markdown(javascript_code, unsafe_allow_html=True)
-                # Widget de entrada de data
+        
 
         data_atual = datetime.datetime.now(fuso_horario)
         data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
@@ -61,14 +70,14 @@ with st.form("cadSolicitacao", clear_on_submit=True):
 
     with col2:
             # # # # # # # # # COLUNA 02 DE FORMS # # # # # # # # # # # # # # # # #
-        desc_servico = st.text_area(label="Descrição Serviços:", on_change=None)
-        forncedor = st.text_input(label="Fornecedor: ", placeholder="Fornecedor")
-        tp_urg = st.selectbox(label="Emegencial?", options=['NÃO', 'SIM'], on_change=None)
+        desc_servico = st.text_area(label="Descrição Serviços:", key="desc_servico_key", on_change=None)
+        forncedor = st.text_input(label="Fornecedor: ", placeholder="Fornecedor", key="fornecedor_key", on_change=None)
+        tp_urg = st.selectbox(label="Emegencial?", options=['NÃO', 'SIM'], key="tp_urg_key", on_change=None)
         if tp_urg == "SIM":
             gr_complexidade = st.selectbox(label="Classificação emergencial: ", options=['Biologico', 'Estruturais', 'Eletricos', 'Perdas ou Avarias', 'Operação', 'Imagem'], on_change=None)
         else:
              gr_complexidade = st.selectbox(label="Classificação emergencial: ", options=[""], disabled=True)
-        nr_chamado = st.text_input(label="Número do chamado: *", placeholder="Nº Chamado", on_change=None)
+        nr_chamado = st.text_input(label="Número do chamado: *", placeholder="Nº Chamado", key="nr_chamado_key",on_change=None)
 
 
 
@@ -85,6 +94,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
     cod_registro = col_solicitacao.count_documents({}) 
     
     btn_cadastrar = st.form_submit_button("Cadastrar", use_container_width=True)
+    btn_limpar=col2.button("Limpar🧹", on_click=clear_text_inputs, type="primary")
 
     if btn_cadastrar:
     
@@ -131,7 +141,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                         links.append('')
                 finally:
                     os.unlink(temp_file2.name)
-
+            
+            
             if solcitante == "" or cod_loja is None or solcitante is None or nr_chamado == "" or nr_chamado is None or loja is None:
                 st.warning("Favor preencha todos os campos")
             else:
@@ -162,9 +173,10 @@ with st.form("cadSolicitacao", clear_on_submit=True):
 
                 end_time = time.time()
                 duration = end_time - start_time
-                st.experimental_rerun()
+                
                 if id_result:
                     st.success(f"Registro cadastrado com sucesso ID: {id_result}")
                 else:
                     st.error("Erro ao registrar informações")
-  
+           
+
