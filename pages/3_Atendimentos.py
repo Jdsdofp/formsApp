@@ -167,15 +167,20 @@ if 'data_dict' in locals():
 
             if submitted:
                 filterID = int(cd_rgs)
-                filter_criteria={'cod_registro': filterID}
+
+            
+              
+                filter_criteria={'cod_registro': 71}
                 
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
                 new_stts=str(stts)
 
-                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
+                
 
+                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
+
                 if resultUpdate:
                     st.info(f"Status de registro fechado com sucesso")
                     

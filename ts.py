@@ -14,7 +14,14 @@ st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDr
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
 
-cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0)
+def clear_text():
+    st.session_state["solicitante"] = ""
+    st.session_state["loja"] = ""
+    st.session_state["uploaded_file_1"] = None
+    st.session_state["uploaded_file_2"] = None
+    st.session_state["cod_loja"] = 0 
+
+cod_loja = col1.number_input("Cod. Loja *", help=("Digite o codigo da loja"),step=0, key="cod_loja", value=st.session_state.get("cod_loja", 0))
 
 
 lojas={"nr_loja": cod_loja}
@@ -22,16 +29,17 @@ projecao = {"_id": 0, "nr_loja": 0}
 result_filial = col_filiais.find_one(lojas, projecao)
 
 
+
 with st.form("cadSolicitacao", clear_on_submit=True):
     with col1:
-        solcitante = st.text_input("Solicitante *", placeholder="Solicitante")
+        solcitante = st.text_input("Solicitante *", placeholder="Solicitante", key="solicitante")
         if result_filial==None:
-            loja = st.text_input("Loja", disabled=True)
+            loja = st.text_input("Loja", disabled=True, key="loja")
         else:
-            loja = st.text_input("Loja", result_filial["nome_loja"],disabled=True)
+            loja = st.text_input("Loja", result_filial["nome_loja"],disabled=True, key="loja")
         uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
         uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])    
-        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], on_change=None)
+        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', ''], on_change=None)
 
         javascript_code = """
                 <script>
@@ -62,7 +70,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
     with col2:
             # # # # # # # # # COLUNA 02 DE FORMS # # # # # # # # # # # # # # # # #
         desc_servico = st.text_area(label="Descrição Serviços:", on_change=None)
-        forncedor = st.text_input(label="Fornecedor: ", placeholder="Fornecedor")
+        forncedor = st.text_input(label="Fornecedor: ", placeholder="Fornecedor", on_change=None)
         tp_urg = st.selectbox(label="Emegencial?", options=['NÃO', 'SIM'], on_change=None)
         if tp_urg == "SIM":
             gr_complexidade = st.selectbox(label="Classificação emergencial: ", options=['Biologico', 'Estruturais', 'Eletricos', 'Perdas ou Avarias', 'Operação', 'Imagem'], on_change=None)
@@ -159,12 +167,11 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                 registro = col_solicitacao.insert_one(data)
                 result = col_solicitacao.find_one({"_id": registro.inserted_id})
                 id_result = result["cod_registro"]
+                clear_text()
 
                 end_time = time.time()
                 duration = end_time - start_time
-                st.experimental_rerun()
                 if id_result:
                     st.success(f"Registro cadastrado com sucesso ID: {id_result}")
                 else:
                     st.error("Erro ao registrar informações")
-  
