@@ -169,8 +169,8 @@ if 'data_dict' in locals():
                 filterID = int(cd_rgs)
 
             
-              
-                filter_criteria={'cod_registro': 71}
+            
+                filter_criteria={'cod_registro': filterID}
                 
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
