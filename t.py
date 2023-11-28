@@ -184,7 +184,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "data_abertura": data_abertura,
                     "data_solicitacao": str(data_solicitacao.strftime("%d/%m/%Y")),
                     "desc_servico": str(desc_servico).upper(),
-                    "forncedor": str(forncedor).upper() if forncedor else "*",
+                    "forncedor": str(forncedor).upper(),
                     "tp_urg": tp_urg,
                     "gr_complexidade": gr_complexidade,
                     "nr_chamado": str(nr_chamado).upper(),
