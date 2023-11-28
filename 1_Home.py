@@ -153,7 +153,7 @@ if scs_db:
     # Mostrar a tabela no Streamlit
     #st.write(styled_df, unsafe_allow_html=True)
     #st.markdown(styled_df)
-    st.dataframe(styled_df, use_container_width=True, hide_index=True, height=350)
+    st.dataframe(styled_df, use_container_width=True, height=350)
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',

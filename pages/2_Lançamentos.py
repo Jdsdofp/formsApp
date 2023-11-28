@@ -65,7 +65,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             loja = st.text_input("Loja", result_filial["nome_loja"], disabled=True)
         uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
         uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])    
-        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], key="class_servico_key",on_change=None, placeholder="Selecione a opção")
+        class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], key="class_servico_key",on_change=None)
         
 
         javascript_code = """
