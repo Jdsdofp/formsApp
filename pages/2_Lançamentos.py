@@ -8,7 +8,6 @@ from config import *
 from mega import Mega
 import datetime
 import time
-from typing import Literal
 from streamlit_local_storage import LocalStorage
 
 
