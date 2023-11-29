@@ -106,6 +106,7 @@ scs_db = [documento for documento in col_solicitacao.find()]
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
+    
 
 
     df = df.rename(columns={
@@ -153,7 +154,7 @@ if scs_db:
     # Mostrar a tabela no Streamlit
     #st.write(styled_df, unsafe_allow_html=True)
     #st.markdown(styled_df)
-    st.dataframe(styled_df, use_container_width=True, height=350)
+    st.dataframe(styled_df, use_container_width=True, height=350, hide_index=True)
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
@@ -167,4 +168,4 @@ else:
         'Número do Chamado',
         'Status','Descrição Serviço'
     ])
-
+    
