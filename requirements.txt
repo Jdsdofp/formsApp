@@ -12,12 +12,12 @@ pyarrow
 pyee
 av
 Pillow
-tenacity
 click
 importlib-metadata
 tornado
 PyYAML
 cachetools
+tenacity
 altair
 smmap
 tqdm
@@ -132,7 +132,6 @@ pipreqs
 colorama
 streamlit-aggrid
 pyasn1-modules
-mega
 ifaddr
 tangled-up-in-unicode
 extra-streamlit-components
