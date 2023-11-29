@@ -105,7 +105,7 @@ shapely
 six
 smmap
 stone
-streamlit==1.27.1
+streamlit
 streamlit-aggrid
 streamlit-local-storage
 streamlit-modal
