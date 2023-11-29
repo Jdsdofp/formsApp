@@ -106,7 +106,7 @@ scs_db = [documento for documento in col_solicitacao.find()]
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
-    pd.set_option('display.max_info_columns', len(df.columns))
+    
 
 
     df = df.rename(columns={

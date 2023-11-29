@@ -63,7 +63,7 @@ numpy
 oauth2client
 openpyxl
 packaging
-pandas
+pandas==1.3.3
 pandas-profiling
 pathlib
 phik
