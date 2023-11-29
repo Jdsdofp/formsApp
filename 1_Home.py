@@ -111,14 +111,14 @@ if scs_db:
 
     df = df.rename(columns={
         'solicitante': 'Solicitante',
-        'cod_loja': 'Código da Loja',
+        'cod_loja': 'Nº Loja',
         'loja': 'Loja',
         'data_abertura': 'Data de Abertura',
         'data_solicitacao': 'Data de Solicitação',
         'forncedor': 'Fornecedor',
-        'tp_urg': 'Tipo de Urgência',
+        'tp_urg': 'Urgente',
         'gr_complexidade': 'Grau de Complexidade',
-        'nr_chamado': 'Número do Chamado',
+        'nr_chamado': 'Nº Chamado',
         'nr_solicitacao':'Solicitação',
         'status': 'Status',
         'desc_servico': 'Descrição Serviço'

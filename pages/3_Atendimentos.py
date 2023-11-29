@@ -50,6 +50,8 @@ if scs_db:
 
     df = df[["#"] + [col for col in df.columns if col != "#"]]
     gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_column("#", pinned="left")
+    gb.configure_column("cod_registro", pinned="left")
     gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
     gb.configure_selection(selection_mode="single", use_checkbox=False)
     gb.configure_side_bar()
