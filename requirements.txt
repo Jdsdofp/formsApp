@@ -63,7 +63,7 @@ numpy
 oauth2client
 openpyxl
 packaging
-pandas==1.3.3
+pandas
 pandas-profiling
 pathlib
 phik
@@ -105,7 +105,7 @@ shapely
 six
 smmap
 stone
-streamlit
+streamlit==1.27.1
 streamlit-aggrid
 streamlit-local-storage
 streamlit-modal
