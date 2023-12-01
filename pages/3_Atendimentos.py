@@ -2,8 +2,12 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import *
 from st_aggrid.grid_options_builder import GridOptionsBuilder
-
+from streamlit_local_storage import LocalStorage
 from models import *
+import datetime
+import time
+from config import *
+
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 
@@ -12,6 +16,12 @@ scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['abe
 
 
 st.subheader("📝 Atendimentos")
+
+def LocalStorageManager():
+    return LocalStorage()
+
+localS = LocalStorageManager()
+
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
@@ -120,11 +130,35 @@ else:
         'Descrição Serviço'
     ])
 
+lS = localS.getItem("atend", key="get_item")
+urs = lS.get("storage", {}) if lS is not None else {}
+
+usr = urs.get("value") if isinstance(urs, dict) else ""
+data_atual = datetime.datetime.now(fuso_horario)
+data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
+
+
+
 if 'data_dict' in locals():
+    if usr:
+        atnd = st.text_input("Atendente: ", key="atendente_key", value=str(usr).upper(), disabled=True)
+        salvar_checkbox = st.checkbox(" ", disabled=True)
+    else:
+        atnd = st.text_input("Atendente: ", key="atendente_key", placeholder="Atendente")
+        salvar_checkbox = st.checkbox("Salvar nome atendente")
+
+            
+    if salvar_checkbox:
+                # Adiciona o valor ao local storage quando o checkbox é marcado
+        localS.setItem("atend", atnd)
     if len(data_dict) > 0:
             with st.form(key="submitted"):
                 col1, col2 = st.columns(2)
                 with col1:
+                    
+                    
+
+
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
                     stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
                     
@@ -140,6 +174,17 @@ if 'data_dict' in locals():
                         col1.markdown(f"<a href='{data_dict[0]['arquivo_2']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo📥 2</a>", unsafe_allow_html=True)
                     elif len(data_dict[0]['arquivo_1']):
                          col1.markdown(f"<a href='{data_dict[0]['arquivo_1']}' style='outline: none; border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Arquivo📥 1</a>", unsafe_allow_html=True)
+                    else:
+                         pass
+                    
+                    if len(data_dict[0]['imagem_1']):
+                        col1.markdown(f"<a href='{data_dict[0]['imagem_1']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 1</a>", unsafe_allow_html=True)  
+                    if len(data_dict[0]['imagem_2']):
+                        col1.markdown(f"<a href='{data_dict[0]['imagem_2']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 2</a>", unsafe_allow_html=True)
+                    if len(data_dict[0]['imagem_3']):
+                        col1.markdown(f"<a href='{data_dict[0]['imagem_3']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 3</a>", unsafe_allow_html=True)
+                    if len(data_dict[0]['imagem_4']):
+                        col1.markdown(f"<a href='{data_dict[0]['imagem_3']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 4</a>", unsafe_allow_html=True)
                     else:
                          pass
 
@@ -176,11 +221,13 @@ if 'data_dict' in locals():
                 
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
+                new_atnd=str(atnd)
                 new_stts=str(stts)
+                new_data_atendimento=data_formatada
 
                 
 
-                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
+                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento}}
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
 
                 if resultUpdate:

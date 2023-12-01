@@ -62,8 +62,15 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             loja = st.text_input("Loja", disabled=True)
         else:
             loja = st.text_input("Loja", result_filial["nome_loja"], disabled=True)
-        uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
-        uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])    
+        with st.expander("Anexar Documentos 📜"):
+            uploaded_file_1 = st.file_uploader(label="Selecione um arquivo: 1", type=["xlsx", "pdf"])
+            uploaded_file_2 = st.file_uploader("Escolha um arquivo: 2", type=["xlsx", "pdf"])
+        with st.expander("Anexar imagens📸"):
+            uploaded_image_1 = st.file_uploader(label="Selecione uma imagem: 1", type=["jpg", "jpeg", "png", "gif"])
+            uploaded_image_2 = st.file_uploader(label="Selecione uma imagem: 2", type=["jpg", "jpeg", "png", "gif"])
+            uploaded_image_3 = st.file_uploader(label="Selecione uma imagem: 3", type=["jpg", "jpeg", "png", "gif"])
+            uploaded_image_4 = st.file_uploader(label="Selecione uma imagem: 4", type=["jpg", "jpeg", "png", "gif"])
+            
         class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], key="class_servico_key",on_change=None)
         
 
@@ -138,6 +145,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                 return mega.get_upload_link(upld)
 
             links = []
+            images= []
 
             start_time = time.time()
 
@@ -168,6 +176,64 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                         links.append('')
                 finally:
                     os.unlink(temp_file2.name)
+
+
+
+            if uploaded_image_1 is not None:
+                temp_img_1 = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg" if uploaded_image_1.type == "image/jpeg" else ".png")
+                try:
+                    temp_img_1.write(uploaded_image_1.getvalue())
+                    temp_img_1.close()
+                    upld_img_1 = fazer_upload_mega(temp_img_1.name)
+                    link_img_1 = get_shared_link_mega(upld_img_1)
+                    if link_img_1 is not None:
+                        images.append(link_img_1)
+                    else:
+                        images.append('')
+                finally:
+                    os.unlink(temp_img_1.name)
+
+            if uploaded_image_2 is not None:
+                temp_img_2 = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg" if uploaded_image_2.type == "image/jpeg" else ".png")
+                try:
+                    temp_img_2.write(uploaded_image_2.getvalue())
+                    temp_img_2.close()
+                    upld_img_2 = fazer_upload_mega(temp_img_2.name)
+                    link_img_2 = get_shared_link_mega(upld_img_2)
+                    if link_img_2 is not None:
+                        images.append(link_img_2)
+                    else:
+                        images.append('')
+                finally:
+                    os.unlink(temp_img_2.name)
+
+            if uploaded_image_3 is not None:
+                temp_img_3 = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg" if uploaded_image_3.type == "image/jpeg" else ".png")
+                try:
+                    temp_img_3.write(uploaded_image_3.getvalue())
+                    temp_img_3.close()
+                    upld_img_3 = fazer_upload_mega(temp_img_3.name)
+                    link_img_3 = get_shared_link_mega(upld_img_3)
+                    if link_img_3 is not None:
+                        images.append(link_img_3)
+                    else:
+                        images.append('')
+                finally:
+                    os.unlink(temp_img_3.name)
+
+            if uploaded_image_4 is not None:
+                temp_img_4 = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg" if uploaded_image_4.type == "image/jpeg" else ".png")
+                try:
+                    temp_img_4.write(uploaded_image_4.getvalue())
+                    temp_img_4.close()
+                    upld_img_4 = fazer_upload_mega(temp_img_4.name)
+                    link_img_4 = get_shared_link_mega(upld_img_4)
+                    if link_img_4 is not None:
+                        images.append(link_img_4)
+                    else:
+                        images.append('')
+                finally:
+                    os.unlink(temp_img_4.name)
             
             
             if solcitante == "" or cod_loja is None or solcitante is None or nr_chamado == "" or nr_chamado is None or loja is None:
@@ -180,6 +246,10 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "loja": loja,
                     "arquivo_1": links[0] if links else "",
                     "arquivo_2": links[1] if len(links) > 1 else "",
+                    "imagem_1": images[0] if images else "",
+                    "imagem_2": images[1] if len(images) > 1 else "",
+                    "imagem_3": images[2] if len(images) > 2 else "",
+                    "imagem_4": images[3] if len(images) > 3 else "",
                     "class_servico": class_servico,
                     "data_abertura": data_abertura,
                     "data_solicitacao": str(data_solicitacao.strftime("%d/%m/%Y")),
@@ -188,6 +258,8 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "tp_urg": tp_urg,
                     "gr_complexidade": gr_complexidade,
                     "nr_chamado": str(nr_chamado).upper(),
+                    "atendente": "",
+                    "data_atendimento": "",
                     "nr_solicitacao": 0,
                     "status": "aberto",
                     "oc": 0,

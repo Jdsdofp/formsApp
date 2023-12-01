@@ -70,6 +70,13 @@ total_registros = col_solicitacao.count_documents({})
 # # # # # # # # # FIM total de solicitações abertas # # # # # # # # # 
 
 
+# # # # # # # # # contagem de solicitações canceladas # # # # # # # # # #
+sc_cancelada = [documento for documento in col_solicitacao.find({"status": "cancelado"})]
+contagem_cancelada = sum(1 for dado in sc_cancelada if dado.get('status') == 'cancelado')
+rgts=total_registros-contagem_cancelada
+# # # # # # # # # FIM contagem de solicitações canceladas # # # # # # # # #
+
+
 # # # # # # # # # contagem de solicitações finalizadas # # # # # # # # # #
 sc_finalizada = [documento for documento in col_solicitacao.find({"status": "finalizada"})]
 contagem_finalizada = sum(1 for dado in sc_finalizada if dado.get('status') == 'finalizada')
@@ -81,20 +88,25 @@ sc_tt_aberto = [documento for documento in col_solicitacao.find({"status": "aber
 contagem_tt_aberto = sum(1 for dado in sc_tt_aberto if dado.get('status') == 'aberto')
 # # # # # # # # FIM contagem de chamados abertos no total geral # # # # # # # 
 
-col1, col2, col3, col4, col5 = st.columns(5)
+
+
+
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 with col1:
-    col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj, delta="+1")
+    col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj)
 with col2:
     col2.metric(label="Total Aberto", help="Total de solicitações abertas", value=contagem_tt_aberto, delta=f"+{ocorrencias_hj}")
 with col3:
     col3.metric(label="Fechado", help="Número de Solicitações fechadas", value=contagem_fechado, delta="-2")
 with col4:
-    col4.metric(label="Finalizada", help="Solicitações com OCs já emitidas",value=contagem_finalizada, delta="-2")
-
+    col4.metric(label="Cancelado", help="Solicitações canceladas", value=contagem_cancelada)
 with col5:
-    col5.markdown(
+    col5.metric(label="Finalizada", help="Solicitações com OCs já emitidas",value=contagem_finalizada, delta="-2")
+
+with col6:
+    col6.markdown(
             f"<p style='margin: 1px; color: #6E6F6E'>Total Geral</p>"
-            f"<div style='background-color: #F5EEEF; border-radius: 20px; padding: 10px; height: 80px; width: 60%; box-shadow: 1px 1px 10px #D3DBD6; border: solid #D3DBD6 1px; font-size: 35px;'>{total_registros}</div>",
+            f"<div style='background-color: #F5EEEF; border-radius: 20px; padding: 10px; height: 80px; width: 60%; box-shadow: 1px 1px 10px #D3DBD6; border: solid #D3DBD6 1px; font-size: 35px;'>{rgts}</div>",
             unsafe_allow_html=True
         )
 
@@ -102,7 +114,7 @@ with col5:
 st.divider()
 st.markdown("<h4 style='color: #D24545; font-family: 'Roboto Mono', monospace;'>Lista de registros</h4>", unsafe_allow_html=True)
 st.divider()
-scs_db = [documento for documento in col_solicitacao.find()]
+scs_db = [documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado', 'finalizada']}})]
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
@@ -121,11 +133,13 @@ if scs_db:
         'nr_chamado': 'Nº Chamado',
         'nr_solicitacao':'Solicitação',
         'status': 'Status',
+        'atendente': 'Atend.',
+        'data_atendimento': 'Data Atendimento',
         'desc_servico': 'Descrição Serviço'
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2']
+    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2', 'imagem_1', 'imagem_2', 'imagem_3', 'imagem_4']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
