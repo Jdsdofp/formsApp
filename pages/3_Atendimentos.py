@@ -225,10 +225,13 @@ if 'data_dict' in locals():
                 new_stts=str(stts)
                 new_data_atendimento=data_formatada
 
-                
-
-                new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento}}
-                resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
+                oc=col_solicitacao.find_one({"cod_registro": filterID})
+                if oc["nr_solicitacao"] == 0:
+                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento}}
+                    resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
+                else:
+                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
+                    resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
 
                 if resultUpdate:
                     st.info(f"Status de registro fechado com sucesso")
