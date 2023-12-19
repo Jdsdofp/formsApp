@@ -315,7 +315,7 @@ with st.expander("Editar 🔄"):
                             pass
                         
 
-                    submitted = st.form_submit_button(label="Cancelar :heavy_check_mark:", type="primary", use_container_width=True)
+                    submitted = st.form_submit_button(label="Alterar :heavy_check_mark:", type="primary", use_container_width=True)
 
                 if submitted:
                     filterID = int(cd_rgs)
@@ -323,13 +323,12 @@ with st.expander("Editar 🔄"):
                 
                 
                     filter_criteria={'cod_registro': filterID}
-                    new_nr_cmd=str(nr_cmd)
+                    new_nr_cmd=str(nr_cmd).upper()
                     new_forncedor=str(frn).upper()
                     new_nr_solic=int(nr_solic)
-
                     
 
-                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': new_nr_cmd, }}
+                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': new_nr_cmd, "nr_solicitacao":  new_nr_solic}}
                     resultUpdate=col_solicitacao.find_one_and_update(filter_criteria, new_values)
 
                     if resultUpdate:
