@@ -207,6 +207,7 @@ if 'data_dict' in locals():
                          nr_oc=col2.number_input("Nº OC: ", data_dict[0]['OC'],  disabled=True)
                     else:
                          nr_oc=col2.number_input("Nº OC: ",step=0)
+                         vlr_oc=col2.text_input("Valor R$ (OC): ")
 
                     
 
@@ -230,7 +231,7 @@ if 'data_dict' in locals():
                     new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento}}
                     resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 else:
-                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
+                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'vlr_oc': vlr_oc,}}
                     resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
 
                 if resultUpdate:

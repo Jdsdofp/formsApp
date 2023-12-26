@@ -125,7 +125,6 @@ if scs_db:
         'solicitante': 'Solicitante',
         'cod_loja': 'Nº Loja',
         'loja': 'Loja',
-        'data_abertura': 'Data de Abertura',
         'data_solicitacao': 'Data de Solicitação',
         'forncedor': 'Fornecedor',
         'tp_urg': 'Urgente',
@@ -139,13 +138,13 @@ if scs_db:
     })
 
     # Remover colunas indesejadas
-    colunas_para_remover = ['_id', 'arquivo_1', 'arquivo_2', 'imagem_1', 'imagem_2', 'imagem_3', 'imagem_4']
+    colunas_para_remover = ['_id', 'data_abertura', 'arquivo_1', 'arquivo_2', 'imagem_1', 'imagem_2', 'imagem_3', 'imagem_4']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
     cols.insert(0, cols.pop(cols.index('cod_registro')))
     df = df[cols]
-
+    
     # Aplicar a cor ao cabeçalho
 
     # Mudar a cor das linhas com base no status "aberto"
@@ -163,18 +162,19 @@ if scs_db:
     # Mostrar a tabela no Streamlit
     #st.write(styled_df, unsafe_allow_html=True)
     #st.markdown(styled_df)
-    st.dataframe(styled_df, use_container_width=True, height=350, hide_index=True)
+    st.dataframe(styled_df, use_container_width=True, height=600, hide_index=True)
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
         'Código da Loja',
         'Loja',
         'Data de Abertura',
-        'Data de Solicitação',
         'Fornecedor',
         'Tipo de Urgência',
         'Grau de Complexidade',
         'Número do Chamado',
-        'Status','Descrição Serviço'
+        'Status',
+        'Descrição Serviço',
+        'oc'
     ])
     
