@@ -6,13 +6,13 @@ from config import *
 from models import *
 import datetime
 from babel.numbers import format_currency
-
+import warnings
 
 
 
 # Cabeçalho personalizados
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
-
+warnings.filterwarnings("ignore", category=UserWarning, module="pandas")
 st.markdown(
             """
             <style>
@@ -92,8 +92,13 @@ contagem_tt_aberto = sum(1 for dado in sc_tt_aberto if dado.get('status') == 'ab
 
 total_vlr_oc = 0
 for documento in col_solicitacao.find({}, {"vlr_oc": 1}):
-    vlr_oc = documento.get("vlr_oc", "0").replace(",", ".")
+    vlr_oc = str(documento.get("vlr_oc", "0"))
+    
+    # Certifique-se de que vlr_oc é uma string antes de chamar replace
+    vlr_oc = vlr_oc.replace(",", ".") if isinstance(vlr_oc, str) else str(vlr_oc)
+    
     total_vlr_oc += float(vlr_oc)
+
 # Formatando o total como moeda BRL
 total_vlr_oc_formatado = format_currency(total_vlr_oc, 'BRL', locale='pt_BR')
 

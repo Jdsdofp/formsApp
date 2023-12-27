@@ -1,4 +1,6 @@
+import pandas as pd
 from database import *
+
 
 mydb = client["mydatabase"]
 
