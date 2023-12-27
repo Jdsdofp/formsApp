@@ -181,7 +181,7 @@ if 'data_dict' in locals():
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
 
-                new_values={'$set':{'NF': nf, 'vlr_oc': vlr_oc}}
+                new_values={'$set':{'NF': nf, 'vlr_oc': formatar_moeda_brl(vlr_oc)}}
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:
