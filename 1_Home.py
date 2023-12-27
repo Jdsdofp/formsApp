@@ -156,7 +156,29 @@ if scs_db:
     df = df[cols]
     
     # Aplicar a cor ao cabeçalho
+    colunas_predefinidas = [
+        'cod_registro',
+        'Solicitante',
+        'Nº Loja',
+        'Loja',
+        'class_servico',
+        'Data de Solicitação',
+        'Descrição Serviço',
+        'Fornecedor',
+        'Urgente',
+        'Grau de Complexidade',
+        'Nº Chamado',
+        'Solicitação',
+        'oc',
+        'NF',
+        'vlr_oc',
+        'Status',
+        'Atend.',
+        'Data Atendimento',
+    ]
 
+    df = df[colunas_predefinidas]
+    
     # Mudar a cor das linhas com base no status "aberto"
     def color_rows(row):
         if row['Status'] == 'aberto':
@@ -185,6 +207,6 @@ else:
         'Número do Chamado',
         'Status',
         'Descrição Serviço',
-        'oc'
+        'oc',
     ])
     

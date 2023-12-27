@@ -58,7 +58,31 @@ if scs_db:
     cols.insert(0, cols.pop(cols.index('cod_registro')))
     df = df[cols]
 
-    df = df[["#"] + [col for col in df.columns if col != "#"]]
+    ordem_colunas = [
+        "Código da Loja",
+        "Loja",
+        "arquivo_1",
+        "arquivo_2",
+        "class_servico",
+        "Data de Abertura",
+        "Data de Solicitação",
+        "Descrição Serviço",
+        "Tipo de Urgência",
+        "Número do Chamado",
+        "Nº Solicitação",
+        "OC",
+        "vlr_oc",
+        "Status",
+        "atendente",
+        "data_atendimento",
+        "imagem_1",
+        "imagem_2",
+        "imagem_3",
+        "imagem_4"
+        # Adicione outras colunas conforme necessário
+    ]
+
+    df = df[["#"] + ordem_colunas + ["cod_registro"]]
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_column("#", pinned="left")
     gb.configure_column("cod_registro", pinned="left")

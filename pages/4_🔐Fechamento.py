@@ -37,10 +37,30 @@ if scs_db:
     colunas_para_remover = ['_id', 'class_servico','gr_complexidade', 'forncedor','Solicitante','Tipo de Urgência', 'arquivo_1', 'arquivo_2', 'Descrição Serviço']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
+    ordem_colunas = [
+        "Código da Loja",
+        "Loja",
+        "Data de Abertura",
+        "Data de Solicitação",
+        "Número do Chamado",
+        "Nº Solicitação",
+        "OC",
+        "NF",
+        "vlr_oc",
+        "Status",
+        "atendente",
+        "data_atendimento"
+        # Adicione outras colunas conforme necessário
+    ]
+
+    df = df[['cod_registro'] + ordem_colunas]
+    
     cols = list(df.columns)
     cols.insert(0, cols.pop(cols.index('cod_registro')))
-    df = df[cols]
 
+    
+    df = df[cols]
+    
  
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
