@@ -27,6 +27,7 @@ jsonschema
 beautifulsoup4
 lxml
 rsa
+babel
 typing-extensions
 ImageHash
 tzlocal
