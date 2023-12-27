@@ -2,16 +2,18 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import *
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+from babel.numbers import format_currency
 
 from models import *
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico", layout="wide")
-
+def formatar_moeda_brl(valor):
+    return format_currency(valor, 'BRL', locale='pt_BR')[2:]
 
 scs_db=[documento for documento in col_solicitacao.find({'status': 'finalizada'})]
 
 
-st.subheader("📝 Fechamento")
+st.subheader("🔐 Fechamento")
 st.markdown("<p> ° Finalização de processo de SCs com NFs geradas<p>", unsafe_allow_html=True)
 
 if scs_db:
@@ -112,12 +114,17 @@ else:
 
 if 'data_dict' in locals():
     if len(data_dict) > 0:
+            
             with st.form(key="submitted"):
                 col1, col2 = st.columns(2)
                 with col1:
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
-                    nf=col1.text_input(label="Nº NF", placeholder="Informe número da NF")
-                
+                    
+                    if data_dict[0]['NF']:
+                        nf=col1.text_input(label="Nº NF", disabled=True, value=data_dict[0]['NF'], placeholder="Informe número da NF")
+                    else:
+                        nf=col1.text_input(label="Nº NF", placeholder="Informe número da NF")
+
                 with col2:
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True,value=data_dict[0]['Número do Chamado'])
                     
@@ -133,9 +140,16 @@ if 'data_dict' in locals():
                          nr_oc=col2.number_input("Nº OC: ", disabled=True)
                     elif data_dict[0]['Status'] == 'finalizada':
                          nr_oc=col2.number_input("Nº OC: ", data_dict[0]['OC'],  disabled=True)
+                         
+                         if data_dict[0]['vlr_oc']:
+                            vlr_oc=col1.text_input("Valor R$: ", value=data_dict[0]['vlr_oc'], placeholder="0,00")
+                         else:
+                             vlr_oc=col1.text_input("Valor R$: ", placeholder="0,00")
                     else:
                          nr_oc=col2.number_input("Nº OC: ",step=0)
 
+                    
+                         
                     
 
                 submitted = st.form_submit_button(label="Fechar :heavy_check_mark:", type="primary", use_container_width=True)
@@ -147,7 +161,7 @@ if 'data_dict' in locals():
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
 
-                new_values={'$set':{'NF': nf}}
+                new_values={'$set':{'NF': nf, 'vlr_oc': vlr_oc}}
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:

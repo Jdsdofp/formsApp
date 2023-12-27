@@ -5,6 +5,7 @@ import os
 from config import *
 from models import *
 import datetime
+from babel.numbers import format_currency
 
 
 
@@ -89,9 +90,16 @@ contagem_tt_aberto = sum(1 for dado in sc_tt_aberto if dado.get('status') == 'ab
 # # # # # # # # FIM contagem de chamados abertos no total geral # # # # # # # 
 
 
+total_vlr_oc = 0
+for documento in col_solicitacao.find({}, {"vlr_oc": 1}):
+    vlr_oc = documento.get("vlr_oc", "0").replace(",", ".")
+    total_vlr_oc += float(vlr_oc)
+# Formatando o total como moeda BRL
+total_vlr_oc_formatado = format_currency(total_vlr_oc, 'BRL', locale='pt_BR')
 
 
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+
+col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 with col1:
     col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj)
 with col2:
@@ -102,15 +110,17 @@ with col4:
     col4.metric(label="Cancelado", help="Solicitações canceladas", value=contagem_cancelada)
 with col5:
     col5.metric(label="Finalizada", help="Solicitações com OCs já emitidas",value=contagem_finalizada, delta="-2")
-
 with col6:
-    col6.markdown(
+    col6.metric(label="Valor Total", help="Valor Total das Solicitações ja finalizadas com OC/NF",value=total_vlr_oc_formatado)
+with col7:
+    col7.markdown(
             f"<p style='margin: 1px; color: #6E6F6E'>Total Geral</p>"
             f"<div style='background-color: #F5EEEF; border-radius: 20px; padding: 10px; height: 80px; width: 60%; box-shadow: 1px 1px 10px #D3DBD6; border: solid #D3DBD6 1px; font-size: 35px;'>{rgts}</div>",
             unsafe_allow_html=True
         )
 
-        #tabela de registros    
+
+#tabela de registros    
 st.divider()
 st.markdown("<h4 style='color: #D24545; font-family: 'Roboto Mono', monospace;'>Lista de registros</h4>", unsafe_allow_html=True)
 st.divider()
