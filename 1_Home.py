@@ -91,16 +91,25 @@ contagem_tt_aberto = sum(1 for dado in sc_tt_aberto if dado.get('status') == 'ab
 
 
 total_vlr_oc = 0
+
+# Itera sobre os documentos da coleção
 for documento in col_solicitacao.find({}, {"vlr_oc": 1}):
-    vlr_oc = str(documento.get("vlr_oc", "0"))
-    
-    # Certifique-se de que vlr_oc é uma string antes de chamar replace
-    vlr_oc = vlr_oc.replace(",", ".") if isinstance(vlr_oc, str) else str(vlr_oc)
-    
-    total_vlr_oc += float(vlr_oc)
+    # Obtém o valor da chave 'vlr_oc' como uma string
+    vlr_oc_str = str(documento.get("vlr_oc", "0"))
+
+    # Remove espaços não quebráveis e substitui vírgulas por pontos (formato brasileiro)
+    vlr_oc_str = vlr_oc_str.replace("\xa0", "").replace(",", ".")
+
+    try:
+        # Tenta converter a string para float e adicionar ao total
+        total_vlr_oc += float(vlr_oc_str)
+    except ValueError:
+        print(f"Ignorando valor não numérico: {vlr_oc_str}")
 
 # Formatando o total como moeda BRL
 total_vlr_oc_formatado = format_currency(total_vlr_oc, 'BRL', locale='pt_BR')
+
+print(f"Total de vlr_oc: {total_vlr_oc_formatado}")
 
 
 
@@ -130,6 +139,7 @@ st.divider()
 st.markdown("<h4 style='color: #D24545; font-family: 'Roboto Mono', monospace;'>Lista de registros</h4>", unsafe_allow_html=True)
 st.divider()
 scs_db = [documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado', 'finalizada']}})]
+
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')

@@ -1,20 +1,23 @@
-# Carregue os dados da planilha Excel
-excel_file = r"C:\Users\jaderson.moreira\Desktop\analise\carga.xlsx"
+import pandas as pd
+from models import *
 
+# Ler a planilha do Excel
+excel_file = 'c:\\Users\\jaderson.moreira\\Desktop\\carga.xlsx'
 df = pd.read_excel(excel_file)
 
-# Itere sobre as linhas do DataFrame e atualize os documentos no MongoDB
+# Iterar sobre as linhas da planilha e atualizar os documentos no MongoDB
 for index, row in df.iterrows():
-    cod_registro = row["cod_registro"]
-    nr_solicitacao = row["nr_solicitacao"]
-    oc = row["oc"]
-    nf = row["NF"]
-    vlr_oc = row["vlr_oc"]
+    cod_registro = row['cod_registro']
+    nr_solicitacao = row['nr_solicitacao']
+    oc = row['oc']
+    NF = row['NF']
+    vlr_oc = row['vlr_oc']
 
-    # Atualize o documento no MongoDB
+    # Atualizar o documento no MongoDB com base no cod_registro
     col_solicitacao.update_one(
-        {"cod_registro": cod_registro},
-        {"$set": {"vlr_oc": str(vlr_oc)}},
+        {'cod_registro': cod_registro},
+        {'$set': {'nr_solicitacao': int(nr_solicitacao), 'oc': int(oc), 'NF': int(NF), 'vlr_oc': float(vlr_oc)}}
     )
 
-print("Inserção em massa concluída.")
+# Fechar a conexão com o MongoDB
+client.close()
