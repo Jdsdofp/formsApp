@@ -26,6 +26,7 @@ protobuf
 jsonschema
 beautifulsoup4
 lxml
+plotly
 rsa
 babel
 typing-extensions
