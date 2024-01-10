@@ -6,10 +6,10 @@ import folium
 import geopandas as gpd
 from folium import Marker, Icon
 from folium.plugins import MarkerCluster
-import locale
+#import locale
 
 # Configurar a formatação para o padrão brasileiro
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 # Configuração inicial do Streamlit
 st.set_page_config(initial_sidebar_state="collapsed", page_icon="Logo_CoraçãoDrogaria_Globo.ico", layout="wide")
