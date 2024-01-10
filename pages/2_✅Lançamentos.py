@@ -263,6 +263,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "nr_solicitacao": 0,
                     "status": "aberto",
                     "oc": 0,
+                    "vlr_oc": 0,
                     "NF": ""
                 }
 

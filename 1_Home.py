@@ -109,7 +109,6 @@ for documento in col_solicitacao.find({}, {"vlr_oc": 1}):
 # Formatando o total como moeda BRL
 total_vlr_oc_formatado = format_currency(total_vlr_oc, 'BRL', locale='pt_BR')
 
-print(f"Total de vlr_oc: {total_vlr_oc_formatado}")
 
 
 

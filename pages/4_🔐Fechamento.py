@@ -162,9 +162,9 @@ if 'data_dict' in locals():
                          nr_oc=col2.number_input("Nº OC: ", data_dict[0]['OC'],  disabled=True)
                          
                          if data_dict[0]['vlr_oc']:
-                            vlr_oc=col1.text_input("Valor R$: ", value=data_dict[0]['vlr_oc'], placeholder="0,00")
+                            vlr_oc=col1.number_input("Valor R$: ", value=data_dict[0]['vlr_oc'])
                          else:
-                             vlr_oc=col1.text_input("Valor R$: ", placeholder="0,00")
+                             vlr_oc=col1.number_input("Valor R$: ", placeholder="0.00")
                     else:
                          nr_oc=col2.number_input("Nº OC: ",step=0)
 
@@ -181,7 +181,7 @@ if 'data_dict' in locals():
                 new_oc=int(nr_oc)
                 nr_slc=int(nr_solic)
 
-                new_values={'$set':{'NF': nf, 'vlr_oc': formatar_moeda_brl(vlr_oc)}}
+                new_values={'$set':{'NF': nf, 'vlr_oc': vlr_oc}}
 
                 resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 if resultUpdate:
