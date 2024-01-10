@@ -27,6 +27,7 @@ jsonschema
 beautifulsoup4
 lxml
 plotly
+locale
 rsa
 babel
 typing-extensions
