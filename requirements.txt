@@ -2,7 +2,6 @@ certifi
 pytz
 tzdata
 setuptools
-io
 base64
 xlsxwriter
 cryptography
