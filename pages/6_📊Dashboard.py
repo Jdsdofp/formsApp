@@ -6,7 +6,7 @@ import folium
 import geopandas as gpd
 from folium import Marker, Icon
 from folium.plugins import MarkerCluster
-#import locale
+#clsimport locale
 
 # Configurar a formatação para o padrão brasileiro
 # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')

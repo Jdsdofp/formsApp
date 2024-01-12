@@ -7,6 +7,9 @@ from models import *
 import datetime
 from babel.numbers import format_currency
 import warnings
+import base64
+import io
+import xlsxwriter  # Add this line
 
 
 
@@ -160,7 +163,7 @@ if scs_db:
         'data_atendimento': 'Data Atendimento',
         'desc_servico': 'Descrição Serviço'
     })
-
+    
     # Remover colunas indesejadas
     colunas_para_remover = ['_id', 'data_abertura', 'arquivo_1', 'arquivo_2', 'imagem_1', 'imagem_2', 'imagem_3', 'imagem_4']
     #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
@@ -209,6 +212,30 @@ if scs_db:
     #st.write(styled_df, unsafe_allow_html=True)
     #st.markdown(styled_df)
     st.dataframe(styled_df, use_container_width=True, height=600, hide_index=True)
+    # Converter listas em strings
+    df['class_servico'] = df['class_servico'].apply(lambda x: ', '.join(x) if isinstance(x, list) else x)
+
+
+    # Adicionar um botão de download para exportar para o Excel
+    if st.button("Exportar para o Excel 📥"):
+        # Obter a data e hora atual
+        current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Construir o nome do arquivo com a data e hora atual
+        file_name = f'relatorio_geral_{current_time}.xlsx'
+
+        # Exportar o DataFrame para o Excel quando o botão é clicado
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name='Planilha1')
+        output.seek(0)
+        b64 = base64.b64encode(output.read()).decode()
+
+        # Criar um link de download e acionar o download automaticamente
+        href = f'<a href="data:application/octet-stream;base64,{b64}" download="{file_name}">Clique aqui para baixar o arquivo Excel</a>'
+        st.markdown(href, unsafe_allow_html=True)
+
+
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
