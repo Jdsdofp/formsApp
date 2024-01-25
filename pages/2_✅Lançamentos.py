@@ -26,6 +26,7 @@ localS = LocalStorageManager()
 def clear_text_inputs():
     st.session_state["cod_loja_key"] = 0
     st.session_state["class_servico_key"] = []
+    st.session_state["tipologia_key"] = "------"
     st.session_state["desc_servico_key"] = ""
     st.session_state["fornecedor_key"] = ""
     st.session_state["tp_urg_key"] = "NÃO"
@@ -72,7 +73,28 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             uploaded_image_4 = st.file_uploader(label="Selecione uma imagem: 4", type=["jpg", "jpeg", "png", "gif"])
             
         class_servico = st.multiselect("Classificação Serviço:",options=['Corretiva','Preventiva', 'Melhoria', 'Mau uso', 'Desmobilização'], key="class_servico_key",on_change=None)
-        
+        tipologia = st.selectbox("Tipologia:", options=['------','CLIMATIZACAO',
+                                                              'ESQUADRIAS',
+                                                              'PAVIMENTAÇÃO EXTERNA / ESTACIONAMENTO',
+                                                              'ESTRUTURA',
+                                                              'FACHADA / COMUNICAÇÃO VISUAL',
+                                                              'FORRO',
+                                                              'GERADORES',
+                                                              'TELHADO / IMPERMEABILIZAÇÕES',
+                                                              'INSTALAÇÕES ELÉTRICAS',
+                                                              'INSTALAÇÕES HIDROSSANITÁRIAS',
+                                                              'LIMPEZAS',
+                                                              'MOBILIÁRIOS / EQUIPAMENTOS',
+                                                              'TOLDOS/PERSIANAS',
+                                                              'ARMÁRIO DE CONTROLADOS',
+                                                              'PAISAGISMO',
+                                                              'PAREDES / DIVISÓRIAS',
+                                                              'PINTURA',
+                                                              'PISOS /  REVESTIMENTOS',
+                                                              'PORTA DE ENROLAR',
+                                                              'SERRALHERIA EM GERAL',
+                                                              'SISTEMA DE COMBATE A INCÊNDIO',
+                                                              'VIDRAÇARIA',], key="tipologia_key", on_change=None)
 
         javascript_code = """
                 <script>
@@ -261,6 +283,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "atendente": "",
                     "data_atendimento": "",
                     "nr_solicitacao": 0,
+                    "tipologia": tipologia,
                     "status": "aberto",
                     "oc": 0,
                     "vlr_oc": 0,
