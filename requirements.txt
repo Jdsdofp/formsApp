@@ -1,6 +1,7 @@
 aioice
 aiortc
 altair
+smtplib
 annotated-types
 ansi2html
 anyio
