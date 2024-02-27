@@ -47,11 +47,24 @@ with st.form("cadSolicitacao", clear_on_submit=True):
 
         usr = urs.get("value") if isinstance(urs, dict) else ""
 
+        # Obtendo os dados diretamente do banco de dados
+        usuarios = [usr for usr in col_usuario.find()]
+
+        # Criar uma lista para armazenar apenas os nomes dos usuários
+        nomes_usuarios = []
+
+        # Adicionar uma opção vazia como a primeira opção
+        nomes_usuarios.append('')
+
+        # Iterar sobre os usuários e extrair apenas os nomes
+        for usuario in usuarios:
+            nomes_usuarios.append(usuario['nome'])
+                        
         if usr:
-            solcitante = st.text_input("Solicitante *", key="solicitante_key", value=str(usr).upper(), disabled=True)
+            solcitante = st.selectbox(label="Usuário", options=[usr], key="solicitante_key", on_change=None, disabled=True)
             salvar_checkbox = st.checkbox("Salvar nome solicitante", disabled=True)
         else:
-            solcitante = st.text_input("Solicitante *", key="solicitante_key", placeholder="Solicitante")
+            solcitante = st.selectbox(label="Usuário", options=nomes_usuarios, on_change=None)
             salvar_checkbox = st.checkbox("Salvar nome solicitante")
 
         # Verifica quando o checkbox é alterado

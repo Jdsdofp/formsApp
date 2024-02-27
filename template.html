@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boas-vindas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fcfcfc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .nr_soli{
+            color: #343232;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solicitação aberta com sucesso! 🚀</h1>
+        <p>Olá, {{nomeSolicitante}}</p>
+        <p>Solicitação: <span class="nr_soli">{{solicitacao}}</span></p>
+        <p>Loja: <span class="nr_soli">{{nomeLoja}}</span></p>
+        <p>Descrição Serviço: <span class="nr_soli">{{servico}}</span></p>
+        <p>Chamado: <span class="nr_soli">{{chamado}}</span></p>
+        <p>Atendido Por: <span class="nr_soli">{{atendente}}</span></p>
+        <p>Data de Atendimento: {{data}}</p>
+        <a href="https://controlscs.onrender.com/" class="btn">Verifique o registro <span style="text-decoration: underline;">{{registro}}</span></a>
+    </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ from models import *
 import datetime
 import time
 from config import *
+from emails import *
 
 
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
@@ -208,7 +209,7 @@ if 'data_dict' in locals():
                     if len(data_dict[0]['imagem_3']):
                         col1.markdown(f"<a href='{data_dict[0]['imagem_3']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 3</a>", unsafe_allow_html=True)
                     if len(data_dict[0]['imagem_4']):
-                        col1.markdown(f"<a href='{data_dict[0]['imagem_3']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 4</a>", unsafe_allow_html=True)
+                        col1.markdown(f"<a href='{data_dict[0]['imagem_4']}' style='border: 1px #777 solid; background: #F36B6B; color: white; padding: 6px; font-size: 13px; border-radius: 20px'>Imagem 📥 4</a>", unsafe_allow_html=True)
                     else:
                          pass
 
@@ -258,8 +259,38 @@ if 'data_dict' in locals():
                     resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
 
                 if resultUpdate:
-                    st.info(f"Status de registro fechado com sucesso")
                     
+                    ##procura o registro e encontra o usuario...
+                    rg=col_solicitacao.find_one({'cod_registro': filterID})
+                    
+                    if rg['status'] == 'fechado':
+
+                        email=[emailUsuario for emailUsuario in col_usuario.find({"nome": rg['solicitante']})]
+
+                        codRegistro = rg['cod_registro']
+                        numSolicitacao = rg['nr_solicitacao']
+                        nomeSolicitante = rg['solicitante']
+                        loja = rg['loja']
+                        servicoSolicitacao = rg['desc_servico']
+                        numeroChamado = rg['nr_chamado']
+                        nomeAtendente = rg['atendente']
+                        dataAtendimento = rg['data_atendimento']
+
+                        st.info(f"Status de registro fechado com sucesso")
+                        email_user=str(email[0]['email'])
+                        email_usuario=email_user,
+
+                        enviar_email(email_usuario, 
+                                     solicitante=nomeSolicitante, 
+                                     solicitacao=numSolicitacao, 
+                                     loja=loja, 
+                                     servico=servicoSolicitacao, 
+                                     chamado=numeroChamado, 
+                                     atendente=nomeAtendente, 
+                                     data=dataAtendimento, 
+                                     registro=codRegistro)
+                    else:
+                        st.warning(f"Status de registro atualizado com sucesso")
 
     else:
             
