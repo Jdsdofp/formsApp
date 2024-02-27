@@ -275,7 +275,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                 st.warning("Favor preencha todos os campos")
             else:
                 data = {
-                    "solicitante": str(solcitante).capitalize(),
+                    "solicitante": str(solcitante),
                     "cod_registro": cod_registro + 1,
                     "cod_loja": cod_loja,
                     "loja": loja,
