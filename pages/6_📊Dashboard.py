@@ -86,6 +86,28 @@ with col1:
     # Exibir gráfico no Streamlit
     col1.plotly_chart(fig)
 
+    tipologia_dd = [tt_tipologia for tt_tipologia in col_solicitacao.find()]
+    
+    df = pd.DataFrame(tipologia_dd)
+
+    # Agrupar por tipologia e somar os valores de vlr_oc
+    df_agrupado = df.groupby('tipologia')['vlr_oc'].sum().reset_index()
+
+    # Ordenar o DataFrame pelo valor total em ordem decrescente
+    df_agrupado = df_agrupado.sort_values(by='vlr_oc', ascending=False)
+
+    # Criar gráfico de barras horizontais com Plotly Express
+    fig = px.bar(df_agrupado, x='vlr_oc', y='tipologia', orientation='h', 
+                title='Custo Total por Tipologia', labels={'vlr_oc': 'Valor Total (R$)', 'tipologia': 'Tipologia'})
+
+    # Adicionar rótulos de valor nas barras
+    fig.update_traces(texttemplate='%{x:.2f}', textposition='outside')
+
+    # Exibir o gráfico no Streamlit
+    st.plotly_chart(fig)
+
+
+
 
     dds = col_solicitacao.find()
     somatoria_por_servico = {}
@@ -110,6 +132,8 @@ with col1:
 
     # Exibir gráfico de pizza no Streamlit
     st.plotly_chart(fig)
+
+
 
     
 

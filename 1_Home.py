@@ -145,8 +145,6 @@ scs_db = [documento for documento in col_solicitacao.find({'status': {'$in': ['a
 
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
-    
-
 
     df = df.rename(columns={
         'solicitante': 'Solicitante',
@@ -157,21 +155,25 @@ if scs_db:
         'tp_urg': 'Urgente',
         'gr_complexidade': 'Grau de Complexidade',
         'nr_chamado': 'Nº Chamado',
-        'nr_solicitacao':'Solicitação',
+        'nr_solicitacao': 'Solicitação',
         'status': 'Status',
         'atendente': 'Atend.',
         'data_atendimento': 'Data Atendimento',
         'desc_servico': 'Descrição Serviço'
     })
-    
+
     # Remover colunas indesejadas
     colunas_para_remover = ['_id', 'data_abertura', 'arquivo_1', 'arquivo_2', 'imagem_1', 'imagem_2', 'imagem_3', 'imagem_4']
-    #df['class_servico'] = df['class_servico'].apply(lambda x: str(x).strip("[]"))
     df = df.drop(colunas_para_remover, axis=1)
     cols = list(df.columns)
     cols.insert(0, cols.pop(cols.index('cod_registro')))
     df = df[cols]
-    
+
+    # Extrair 'stts' da sublista 'situacao'
+    df['Situação'] = df['situacao'].apply(lambda x: x['stts'] if isinstance(x, dict) else None)
+    # Remover a coluna 'situacao'
+    df = df.drop('situacao', axis=1)
+
     # Aplicar a cor ao cabeçalho
     colunas_predefinidas = [
         'cod_registro',
@@ -185,6 +187,7 @@ if scs_db:
         'Urgente',
         'Grau de Complexidade',
         'Nº Chamado',
+        'tipologia',
         'Solicitação',
         'oc',
         'NF',
@@ -192,11 +195,12 @@ if scs_db:
         'Status',
         'Atend.',
         'Data Atendimento',
+        'Situação',  # Alterando de 'stts' para 'Situação'
     ]
 
     df = df[colunas_predefinidas]
     df_filtrado = df[df['Status'].isin(['aberto', 'fechado'])]
-    
+
     # Mudar a cor das linhas com base no status "aberto"
     def color_rows(row):
         if row['Status'] == 'aberto':
@@ -210,12 +214,7 @@ if scs_db:
     styled_df = df_filtrado.style.apply(color_rows, axis=1)
 
     # Mostrar a tabela no Streamlit
-    #st.write(styled_df, unsafe_allow_html=True)
-    #st.markdown(styled_df)
     st.dataframe(styled_df, use_container_width=True, height=600, hide_index=True)
-    # Converter listas em strings
-    df['class_servico'] = df['class_servico'].apply(lambda x: ', '.join(x) if isinstance(x, list) else x)
-
 
     # Adicionar um botão de download para exportar para o Excel
     if st.button("Exportar para o Excel 📥"):
@@ -236,7 +235,6 @@ if scs_db:
         href = f'<a href="data:application/octet-stream;base64,{b64}" download="{file_name}">Clique aqui para baixar o arquivo Excel</a>'
         st.markdown(href, unsafe_allow_html=True)
 
-
 else:
     df = pd.DataFrame(columns=[
         'Solicitante',
@@ -250,5 +248,6 @@ else:
         'Status',
         'Descrição Serviço',
         'oc',
+        'tipologia'
     ])
     

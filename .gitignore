@@ -1,4 +1,4 @@
 .env
-.ts.py
 /venv
 /__pycache__
+.dataInsertMany.py

@@ -298,6 +298,11 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                     "nr_solicitacao": 0,
                     "tipologia": tipologia,
                     "status": "aberto",
+                    "situacao": [{
+                        'stts': '',
+                        'data': '',
+                        'user': ''
+                    }],
                     "oc": 0,
                     "vlr_oc": 0,
                     "NF": ""
