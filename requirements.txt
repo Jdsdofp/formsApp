@@ -129,6 +129,7 @@ stone
 streamlit
 streamlit-aggrid
 streamlit-local-storage
+streamlit_local_storage
 streamlit-modal
 streamlit-webrtc
 streamlit-ws-localstorage

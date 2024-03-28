@@ -14,10 +14,6 @@ def LocalStorageManager():
 localS = LocalStorageManager()
 
 
-def get_current_time():
-    fuso_horario = pytz.timezone('America/Sao_Paulo')  # Defina o fuso horário desejado
-    return datetime.now(fuso_horario).strftime("%d/%m/%Y %H:%M:%S")
-
 def procurar_docs(df, usuario):
     total_documentos_atualizados = 0  # Inicializa o contador de documentos atualizados
     updates = []
@@ -71,20 +67,18 @@ data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
 
 
 with st.expander("Importação de Dados ⚡"):
-    
     lS = localS.getItem("atend", key="get_item")
-
     urs = lS.get("storage", {}) if lS is not None else {}
 
     usr = urs.get("value") if isinstance(urs, dict) else ""
     
 
     if usr:
-            atnd = st.text_input("Atendente: ", key="atendente_key", value=str(usr).upper(), disabled=True)
+            atnd = st.text_input("Atendente: ", key="user_key", value=str(usr).upper(), disabled=True)
             salvar_checkbox = st.checkbox(" ", disabled=True)
     else:
-            atnd = st.text_input("Atendente: ", key="atendente_key", placeholder="Atendente")
-            salvar_checkbox = st.checkbox("Salvar Nome")
+            atnd = st.text_input("Atendente: ", key="user_key", placeholder="Atendente")
+            salvar_checkbox = st.checkbox("Salvar nome")
 
                 
     if salvar_checkbox:
@@ -93,9 +87,6 @@ with st.expander("Importação de Dados ⚡"):
 
     st.write("Carregar arquivo de planilha:")
     arquivo = st.file_uploader("Selecione o arquivo CSV ou Excel", type=["csv", "xlsx"])
-
-    
-    
 
     if arquivo is not None:
         if arquivo.name.endswith('.csv'):
@@ -109,8 +100,6 @@ with st.expander("Importação de Dados ⚡"):
         st.write(df)
 
         if st.button("Importar", type='primary'):
-                
-
             usuario=urs['value']
             procurar_docs(df, usuario)
             # Limpar o arquivo selecionado definindo-o como None
