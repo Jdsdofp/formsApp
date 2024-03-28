@@ -59,7 +59,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
         # Iterar sobre os usuários e extrair apenas os nomes
         for usuario in usuarios:
             nomes_usuarios.append(usuario['nome'])
-                        
+
         if usr:
             solcitante = st.selectbox(label="Usuário", options=[usr], key="solicitante_key", on_change=None, disabled=True)
             salvar_checkbox = st.checkbox("Salvar nome solicitante", disabled=True)
