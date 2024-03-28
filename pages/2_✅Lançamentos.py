@@ -44,33 +44,30 @@ with st.form("cadSolicitacao", clear_on_submit=True):
     with col1:
         lS = localS.getItem("user", key="test_get_item")
         urs = lS.get("storage", {}) if lS is not None else {}
-
         usr = urs.get("value") if isinstance(urs, dict) else ""
 
         # Obtendo os dados diretamente do banco de dados
         usuarios = [usr for usr in col_usuario.find()]
 
         # Criar uma lista para armazenar apenas os nomes dos usuários
-        nomes_usuarios = []
-
-        # Adicionar uma opção vazia como a primeira opção
-        nomes_usuarios.append('')
+        nomes_usuarios = ['']  # Adiciona uma opção vazia como a primeira opção
 
         # Iterar sobre os usuários e extrair apenas os nomes
         for usuario in usuarios:
             nomes_usuarios.append(usuario['nome'])
-                        
-        if usr:
-            solcitante = st.selectbox(label="Usuário", options=[usr], key="solicitante_key", on_change=None, disabled=True)
-            salvar_checkbox = st.checkbox("Salvar nome solicitante", disabled=True)
-        else:
-            solcitante = st.selectbox(label="Usuário", options=nomes_usuarios, on_change=None)
-            salvar_checkbox = st.checkbox("Salvar nome solicitante")
+
+        # Verifica se o usuário foi selecionado anteriormente e define a opção padrão
+        opcao_padrao = usr if usr in nomes_usuarios else None
+
+        # Exibe o seletor com a opção padrão
+        solicitante = st.selectbox(label="Usuário", options=nomes_usuarios, index=nomes_usuarios.index(opcao_padrao) if opcao_padrao else None)
 
         # Verifica quando o checkbox é alterado
+        salvar_checkbox = st.checkbox("Salvar nome solicitante")
+
         if salvar_checkbox:
-            # Adiciona o valor ao local storage quando o checkbox é marcado
-            localS.setItem("user", solcitante)
+            # Adiciona o valor selecionado ao Local Storage quando o checkbox é marcado
+            localS.setItem("user", solicitante)
 
         if result_filial==None:
             loja = st.text_input("Loja", disabled=True)
