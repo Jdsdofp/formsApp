@@ -115,7 +115,6 @@ seaborn
 phik
 cycler
 toolz
-rpds-py
 toml
 aioice
 pydeck
