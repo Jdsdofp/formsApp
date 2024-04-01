@@ -50,6 +50,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
         # Obtendo os dados diretamente do banco de dados
         usuarios = [usr for usr in col_usuario.find()]
 
+        print(usr)
         # Criar uma lista para armazenar apenas os nomes dos usuários
         nomes_usuarios = []
 
@@ -61,7 +62,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
             nomes_usuarios.append(usuario['nome'])
 
         if usr:
-            solcitante = st.selectbox(label="Usuário", options=[usr], key="solicitante_key", on_change=None, disabled=True)
+            solcitante = st.selectbox(label="Usuário", options=[str(usr)], key="solicitante_key", disabled=True)
             salvar_checkbox = st.checkbox("Salvar nome solicitante", disabled=True)
         else:
             solcitante = st.selectbox(label="Usuário", options=nomes_usuarios, on_change=None)
