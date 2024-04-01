@@ -125,7 +125,6 @@ reportlab
 requests
 retrying
 rich
-rpds-py
 rsa
 scipy
 seaborn
