@@ -12,5 +12,6 @@ streamlit-ws-localstorage
 python-dotenv
 geopandas
 folium
+babel
 streamlit-aggrid
 streamlit-local-storage
