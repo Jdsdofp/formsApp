@@ -119,7 +119,6 @@ python-dotenv
 pytz
 pytz-deprecation-shim
 PyWavelets
-pywin32
 PyYAML
 referencing
 reportlab
