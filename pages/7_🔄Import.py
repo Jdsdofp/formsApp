@@ -67,7 +67,7 @@ data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
 
 
 with st.expander("Importação de Dados ⚡"):
-    lS = localS.getItem("atend", key="get_item")
+    lS = localS.getItem("atends", key="get_item")
     urs = lS.get("storage", {}) if lS is not None else {}
 
     usr = urs.get("value") if isinstance(urs, dict) else ""
@@ -83,7 +83,7 @@ with st.expander("Importação de Dados ⚡"):
                 
     if salvar_checkbox:
                     # Adiciona o valor ao local storage quando o checkbox é marcado
-            localS.setItem("atend", atnd)
+            localS.setItem("atends", atnd)
 
     st.write("Carregar arquivo de planilha:")
     arquivo = st.file_uploader("Selecione o arquivo CSV ou Excel", type=["csv", "xlsx"])

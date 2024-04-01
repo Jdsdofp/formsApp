@@ -51,6 +51,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
         usuarios = [usr for usr in col_usuario.find()]
 
         print(usr)
+        st.write(usr)
         # Criar uma lista para armazenar apenas os nomes dos usuários
         nomes_usuarios = []
 
