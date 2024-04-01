@@ -25,8 +25,6 @@ localS = LocalStorageManager()
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
 
-    st.write(scs_db)
-
     # Adicione uma coluna com ícones condicionais
     def row_icons(row):
         if row["status"] == "aberto":
