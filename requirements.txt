@@ -118,7 +118,6 @@ toolz
 toml
 aioice
 pydeck
-pylibsrtp
 visions
 cligj
 Flask-Login
