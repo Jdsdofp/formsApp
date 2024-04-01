@@ -8,13 +8,7 @@ from streamlit_local_storage import LocalStorage
 
 
 
-def LocalStorageManager():
-    return LocalStorage()
-
-localS = LocalStorageManager()
-
-
-def procurar_docs(df, usuario):
+def procurar_docs(df):
     total_documentos_atualizados = 0  # Inicializa o contador de documentos atualizados
     updates = []
 
@@ -35,7 +29,7 @@ def procurar_docs(df, usuario):
                             'situacao': {
                                 'stts': situacao,  # Atualiza o campo 'stts' com o status
                                 'data': data_atual.strftime("%d/%m/%Y %H:%M:%S"),  # Define a data atual
-                                'user': str(usuario).upper()  # Defina o nome do usuário
+                                'user': 'Marina - Suprimentos'  # Defina o nome do usuário
                             }
                         }
                     }
@@ -67,24 +61,7 @@ data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
 
 
 with st.expander("Importação de Dados ⚡"):
-    lS = localS.getItem("atends", key="get_item")
-    urs = lS.get("storage", {}) if lS is not None else {}
-
-    usr = urs.get("value") if isinstance(urs, dict) else ""
-    
-
-    if usr:
-            atnd = st.text_input("Atendente: ", key="user_key", value=str(usr).upper(), disabled=True)
-            salvar_checkbox = st.checkbox(" ", disabled=True)
-    else:
-            atnd = st.text_input("Atendente: ", key="user_key", placeholder="Atendente")
-            salvar_checkbox = st.checkbox("Salvar nome")
-
                 
-    if salvar_checkbox:
-                    # Adiciona o valor ao local storage quando o checkbox é marcado
-            localS.setItem("atends", atnd)
-
     st.write("Carregar arquivo de planilha:")
     arquivo = st.file_uploader("Selecione o arquivo CSV ou Excel", type=["csv", "xlsx"])
 
@@ -100,7 +77,6 @@ with st.expander("Importação de Dados ⚡"):
         st.write(df)
 
         if st.button("Importar", type='primary'):
-            usuario=urs['value']
-            procurar_docs(df, usuario)
+            procurar_docs(df)
             # Limpar o arquivo selecionado definindo-o como None
             arquivo = None
