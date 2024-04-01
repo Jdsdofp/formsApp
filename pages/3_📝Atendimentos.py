@@ -14,7 +14,6 @@ st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDr
 
 
 scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado']}})]
-print(scs_db)
 
 st.subheader("📝 Atendimentos")
 
@@ -23,9 +22,11 @@ def LocalStorageManager():
 
 localS = LocalStorageManager()
 
-
 if scs_db:
     df = pd.DataFrame(scs_db).sort_values(by='status')
+
+    st.write(scs_db)
+
     # Adicione uma coluna com ícones condicionais
     def row_icons(row):
         if row["status"] == "aberto":
