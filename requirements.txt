@@ -126,6 +126,7 @@ sniffio
 sortedcontainers
 soupsieve
 stone
+st_aggrid
 streamlit
 streamlit-aggrid
 streamlit-local-storage
