@@ -14,7 +14,7 @@ st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDr
 
 
 scs_db=[documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado']}})]
-
+print(scs_db)
 
 st.subheader("📝 Atendimentos")
 
