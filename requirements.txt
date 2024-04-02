@@ -143,7 +143,7 @@ streamlit-modal==0.1.0
 streamlit-webrtc==0.47.1
 streamlit-ws-localstorage==1.0.5
 tangled-up-in-unicode==0.2.0
-tenacity==8.2.3
+tenacity==5.1.5
 tinycss2==1.2.1
 toml==0.10.2
 toolz==0.12.0
