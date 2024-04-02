@@ -5,7 +5,6 @@ annotated-types
 ansi2html
 anyio
 asks
-aspose-pdf
 async-generator
 attrs
 av
@@ -14,11 +13,9 @@ bcrypt
 beautifulsoup4
 blinker
 branca
-Brotli
 cachetools
 certifi
 cffi
-chardet
 charset-normalizer
 click
 click-plugins
@@ -26,7 +23,6 @@ cligj
 colorama
 contourpy
 cryptography
-cssselect2
 cycler
 dash
 dash-core-components
@@ -55,13 +51,11 @@ google-auth-httplib2
 google-crc32c
 googleapis-common-protos
 h11
-html5lib
 htmlmin
 httplib2
 idna
 ifaddr
 ImageHash
-imgkit
 importlib-metadata
 itsdangerous
 Jinja2
@@ -86,7 +80,6 @@ packaging
 pandas
 pandas-profiling
 pathlib
-pdfkit
 phik
 Pillow
 pipreqs
@@ -101,7 +94,6 @@ pycryptodome
 pydantic
 pydantic_core
 pydeck
-pydyf
 pyee
 Pygments
 PyJWT
@@ -110,7 +102,6 @@ pymongo
 Pympler
 pyOpenSSL
 pyparsing
-pyphen
 pyproj
 pyrsistent
 python-dateutil
@@ -121,7 +112,6 @@ pytz-deprecation-shim
 PyWavelets
 PyYAML
 referencing
-reportlab
 requests
 retrying
 rich
@@ -144,7 +134,6 @@ streamlit-webrtc
 streamlit-ws-localstorage
 tangled-up-in-unicode
 tenacity
-tinycss2
 toml
 toolz
 tornado
@@ -158,11 +147,7 @@ urllib3
 validators
 visions
 watchdog
-weasyprint
-webencodings
 Werkzeug
-wkhtmltopdf
 XlsxWriter
 yarg
 zipp
-zopfli
