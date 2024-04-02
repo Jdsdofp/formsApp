@@ -44,7 +44,7 @@ folium==0.14.0
 fonttools==4.43.1
 format-currency==0.0.3
 geographiclib==2.0
-geopandas==0.14.1
+geopandas==0.14.0
 geopy==2.3.0
 gitdb==4.0.10
 GitPython==3.1.37
