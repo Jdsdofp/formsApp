@@ -325,14 +325,14 @@ with st.expander("Editar 🔄"):
                     filter_criteria={'cod_registro': filterID}
                     new_nr_cmd=str(nr_cmd).upper()
                     new_forncedor=str(frn).upper()
-                    new_nr_solic=int(nr_solic)
+                    new_nr_solic=nr_solic
                     
 
-                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': new_nr_cmd, "nr_solicitacao":  new_nr_solic}}
+                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': str(new_nr_cmd), "nr_solicitacao":  new_nr_solic}}
                     resultUpdate=col_solicitacao.find_one_and_update(filter_criteria, new_values)
 
                     if resultUpdate:
-                        st.info(f"Status de registro fechado com sucesso")
+                        st.info(f"Registro atualizado com sucesso!")
                         
                         
 

@@ -11,6 +11,9 @@ from streamlit_local_storage import LocalStorage
 def procurar_docs(df):
     total_documentos_atualizados = 0  # Inicializa o contador de documentos atualizados
     updates = []
+    
+    # Define o progresso inicial como 0
+    progresso = st.progress(0)
 
     with st.spinner("Atualizando documentos..."):  # Exibe o spinner durante o processo
         for index, row in df.iterrows():
@@ -38,10 +41,14 @@ def procurar_docs(df):
                 total_documentos_atualizados += 1  # Incrementa o contador de documentos atualizados
             else:
                 pass
+            
+            # Atualiza o indicador de progresso a cada iteração
+            progresso.progress((index + 1) / len(df))
 
         # Atualizar os documentos no MongoDB
         for update in updates:
             col_solicitacao.update_many(update['filter'], update['update'])
+            
 
     st.success(f"Total de documentos atualizados: {total_documentos_atualizados}")
 

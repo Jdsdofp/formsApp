@@ -174,6 +174,18 @@ if scs_db:
     # Remover a coluna 'situacao'
     df = df.drop('situacao', axis=1)
 
+    # Converter strings vazias para NaN (Not a Number)
+    df['Solicitação'] = pd.to_numeric(df['Solicitação'], errors='coerce')
+
+    # Preencher NaN com 0 ou outro valor padrão, se necessário
+    #df['Solicitação'].fillna(0, inplace=True)
+    # Para esta linha:
+    df['Solicitação'] = df['Solicitação'].fillna(0)
+
+    # Converter para inteiro
+    df['Solicitação'] = df['Solicitação'].astype(int)
+
+
     # Aplicar a cor ao cabeçalho
     colunas_predefinidas = [
         'cod_registro',
