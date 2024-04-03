@@ -19,7 +19,7 @@ def procurar_docs(df):
             
             data_atual = datetime.datetime.now(fuso_horario)
 
-            documento = col_solicitacao.find_one({'nr_solicitacao': int(nr_solicitacao)})
+            documento = col_solicitacao.find_one({'nr_solicitacao': nr_solicitacao})
             if documento:
                 # Atualizar o documento no MongoDB
                 update = {
@@ -37,7 +37,7 @@ def procurar_docs(df):
                 updates.append(update)
                 total_documentos_atualizados += 1  # Incrementa o contador de documentos atualizados
             else:
-                st.write(f"Documento não encontrado para o número de solicitação {nr_solicitacao}")
+                pass
 
         # Atualizar os documentos no MongoDB
         for update in updates:

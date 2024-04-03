@@ -1,5 +1,4 @@
 import streamlit as st
-from dotenv import load_dotenv
 import os
 import tempfile
 from logo import *
@@ -12,7 +11,6 @@ from streamlit_local_storage import LocalStorage
 
 
 
-load_dotenv()
 st.set_page_config(initial_sidebar_state="collapsed",page_icon="Logo_CoraçãoDrogaria_Globo.ico",layout="wide")
 st.subheader("✅ Lançamentos")
 col1, col2 = st.columns(2)
