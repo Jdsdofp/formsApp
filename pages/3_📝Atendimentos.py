@@ -87,7 +87,7 @@ if scs_db:
     gb.configure_column("#", pinned="left")
     gb.configure_column("cod_registro", pinned="left")
     gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
-    gb.configure_selection(selection_mode="single", use_checkbox=False)
+    gb.configure_selection(selection_mode="single", use_checkbox=True)
     gb.configure_side_bar()
     gb.configure_pagination("pagination")
     gridoptions = gb.build()
@@ -164,6 +164,7 @@ data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
 
 
 if 'data_dict' in locals():
+    
     if usr:
         atnd = st.text_input("Atendente: ", key="atendente_key", value=str(usr).upper(), disabled=True)
         salvar_checkbox = st.checkbox(" ", disabled=True)
@@ -179,13 +180,10 @@ if 'data_dict' in locals():
             with st.form(key="submitted"):
                 col1, col2 = st.columns(2)
                 with col1:
-                    
-                    
-
-
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
+                    inp_loja=st.markdown(f"<div>Loja: </div><span style='color: #f74856'>{data_dict[0]['Loja']}</span>",unsafe_allow_html=True)
+                    descS=col1.text_input("Descrição Serviço", disabled=True,value=data_dict[0]['Descrição Serviço'])
                     stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
-                    
                     if data_dict[0]['Status'] == 'fechado':
                         stts=col1.selectbox(label="Fechamento: ", options=["finalizada"])
                     elif data_dict[0]['Status'] == 'finalizada':
@@ -299,12 +297,12 @@ if 'data_dict' in locals():
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True, value="")
                     stts_txt=col1.text_input(label="Status: ", disabled=True, value="")
                     stts=col1.selectbox(label="Fechamento: ", disabled=True, options=[""])
-                
+                    
                 with col2:
                     nr_cmd=col2.text_input("Nº Chamado: ", disabled=True, value="")
                     nr_solic=col2.text_input("Nº Solicitação:", disabled=True)
 
                 submitted = st.form_submit_button(label="Lançar :heavy_check_mark:", type="primary", use_container_width=True, disabled=True)
-
+                
 else:
     pass

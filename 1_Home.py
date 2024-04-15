@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.metric_cards import style_metric_cards
 from logo import *
 import pandas as pd
 import os
@@ -117,17 +118,18 @@ total_vlr_oc_formatado = format_currency(total_vlr_oc, 'BRL', locale='pt_BR')
 
 col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 with col1:
-    col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj)
+    col1.metric(label="Aberto Hoje", help="Número de Solicitações abertas hoje", value=ocorrencias_hj, delta=0)
 with col2:
     col2.metric(label="Total Aberto", help="Total de solicitações abertas", value=contagem_tt_aberto, delta=f"+{ocorrencias_hj}")
 with col3:
     col3.metric(label="Fechado", help="Número de Solicitações fechadas", value=contagem_fechado, delta="-2")
 with col4:
-    col4.metric(label="Cancelado", help="Solicitações canceladas", value=contagem_cancelada)
+    col4.metric(label="Cancelado", help="Solicitações canceladas", value=contagem_cancelada, delta=0)
 with col5:
     col5.metric(label="Finalizada", help="Solicitações com OCs já emitidas",value=contagem_finalizada, delta="-2")
 with col6:
     col6.metric(label="Valor Total", help="Valor Total das Solicitações ja finalizadas com OC/NF",value=total_vlr_oc_formatado)
+    style_metric_cards(border_left_color="#f54e5c", box_shadow=True, border_radius_px=20)
 with col7:
     col7.markdown(
             f"<p style='margin: 1px; color: #6E6F6E'>Total Geral</p>"
