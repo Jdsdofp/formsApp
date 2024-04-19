@@ -30,7 +30,7 @@ for i in range(start_row, max_row + 1):
 
 # Carregar os dados em um DataFrame
 lojas = [lj for lj in col_filiais.find()]
-start_date = st.date_input("Selecione a data de início:",  pd.to_datetime('today') - pd.DateOffset(days=7), format='DD/MM/YYYY')
+start_date = st.date_input("Selecione a data de início:",  pd.to_datetime('today'), format='DD/MM/YYYY')
 end_date = st.date_input("Selecione a data de término:", pd.to_datetime('today'), format='DD/MM/YYYY')
 
 # Formatar as datas para o formato esperado na consulta MongoDB
@@ -40,6 +40,8 @@ end_date_format = end_date.strftime("%d/%m/%Y") + " 23:59:59"
 # Filtrar os dados por data de abertura
 query = {'data_atendimento': {'$gte': start_date_format, '$lte': end_date_format}}
 data = [dados for dados in col_solicitacao.find(query)]
+
+
 
 df = pd.DataFrame(data)
 
@@ -110,3 +112,5 @@ st.download_button(
     file_name=f'solicitacoes_{start_date_format}.xlsx',
     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 )
+
+print("Protocolo de SC Gerado")

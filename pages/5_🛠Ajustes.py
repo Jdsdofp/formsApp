@@ -294,6 +294,7 @@ with st.expander("Editar 🔄"):
                     with col1:
                         cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
                         stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
+                        desc=col1.text_area(label="Status: ", value=data_dict[0]['Descrição Serviço'])
                     
 
                     with col2:
@@ -328,7 +329,7 @@ with st.expander("Editar 🔄"):
                     new_nr_solic=nr_solic
                     
 
-                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': str(new_nr_cmd), "nr_solicitacao":  new_nr_solic}}
+                    new_values={'$set':{'forncedor': new_forncedor, 'nr_chamado': str(new_nr_cmd), "nr_solicitacao":  new_nr_solic, "desc_servico": desc}}
                     resultUpdate=col_solicitacao.find_one_and_update(filter_criteria, new_values)
 
                     if resultUpdate:
