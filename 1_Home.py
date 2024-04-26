@@ -145,7 +145,13 @@ st.divider()
 scs_db = [documento for documento in col_solicitacao.find({'status': {'$in': ['aberto', 'fechado', 'finalizada']}})]
 
 
+# Verificar o tema atual
+theme = st.get_option("theme.primaryColor")
+# Definir a cor do texto com base no tema
+text_color = "#FFFFFF" if theme == "#262730" else "#000000"
+
 if scs_db:
+    
     df = pd.DataFrame(scs_db).sort_values(by='status')
 
     df = df.rename(columns={
@@ -217,15 +223,19 @@ if scs_db:
 
     # Mudar a cor das linhas com base no status "aberto"
     def color_rows(row):
-        if row['Status'] == 'aberto':
-            return ['background-color: #EF8989'] * len(row)
-        elif row['Status'] == 'fechado':
-            return ['background-color: #FFF3CE'] * len(row)
-        else:
-            return ['background-color: white'] * len(row)
+        styles = []
+        for value in row:
+            if row['Status'] == 'aberto':
+                styles.append('background-color: #EF8989; color: {};'.format(text_color))
+            elif row['Status'] == 'fechado':
+                styles.append('background-color: #FFF3CE; color: {};'.format(text_color))
+            else:
+                styles.append('background-color: white; color: {};'.format(text_color))
+        return styles
 
     # Aplicar a cor condicional às linhas
     styled_df = df_filtrado.style.apply(color_rows, axis=1)
+
 
     # Mostrar a tabela no Streamlit
     st.dataframe(styled_df, use_container_width=True, height=600, hide_index=True)

@@ -106,7 +106,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
                                                               'PORTA DE ENROLAR',
                                                               'SERRALHERIA EM GERAL',
                                                               'SISTEMA DE COMBATE A INCÊNDIO',
-                                                              'VIDRAÇARIA',], key="tipologia_key", on_change=None)
+                                                              'VIDRAÇARIA', 'MANUTENÇÃO DIVERSAS'], key="tipologia_key", on_change=None)
 
         javascript_code = """
                 <script>

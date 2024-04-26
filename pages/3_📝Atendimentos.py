@@ -160,7 +160,7 @@ urs = lS.get("storage", {}) if lS is not None else {}
 usr = urs.get("value") if isinstance(urs, dict) else ""
 data_atual = datetime.datetime.now(fuso_horario)
 data_formatada = data_atual.strftime("%d/%m/%Y %H:%M:%S")
-
+nova_data_atend = data_atual.replace(hour=0, minute=0, second=0)
 
 
 if 'data_dict' in locals():
@@ -249,7 +249,7 @@ if 'data_dict' in locals():
 
                 oc=col_solicitacao.find_one({"cod_registro": filterID})
                 if oc["nr_solicitacao"] == 0:
-                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento}}
+                    new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc, 'atendente': new_atnd, 'data_atendimento': new_data_atendimento, 'data_atend': nova_data_atend}}
                     resultUpdate=col_solicitacao.update_one(filter_criteria, new_values)
                 else:
                     new_values={'$set':{'nr_solicitacao': nr_slc,'status': new_stts, 'oc': new_oc}}
