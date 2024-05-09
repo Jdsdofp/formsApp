@@ -69,7 +69,7 @@ def enviar_email(email_usuario, solicitante, solicitacao, loja, servico, chamado
         # Enviando o e-mail
         smtpserver.sendmail(sent_from, sent_to, message.as_string())
         
-        print('E-mail enviado com sucesso!')
+        print(f'E-mail enviado com sucesso! - {nome_destinatario} / {nrSolicitacao}')
 
     except Exception as e:
         print('Erro ao enviar e-mail:', str(e))

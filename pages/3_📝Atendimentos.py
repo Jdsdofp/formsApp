@@ -181,8 +181,13 @@ if 'data_dict' in locals():
                 col1, col2 = st.columns(2)
                 with col1:
                     cd_rgs=col1.text_input(label="Cod. Registro", disabled=True,value=data_dict[0]['cod_registro'])
-                    inp_loja=st.markdown(f"<div>Loja: </div><span style='color: #f74856'>{data_dict[0]['Loja']}</span>",unsafe_allow_html=True)
+                    users_s=[u for u in col_solicitacao.find({"cod_registro": int(cd_rgs)})]
+                    
+                    inp_loja=st.markdown(f"<div> <div style='display: inline-block; color: #000'>Loja: </div> <span style='color: #777; display: inline-block; padding: 2px; background: #dbdbdb; border-radius: 5px;'>{users_s[0]['cod_loja']} - {data_dict[0]['Loja']}</span></div>",unsafe_allow_html=True)
+                    inp_solicitante=st.markdown(f"<div> <div style='display: inline-block; color: #000'>Solicitante: </div> <span style='color: #777; display: inline-block; margin-top: 10px; padding: 2px; background: #dbdbdb; border-radius: 5px'> {users_s[0]['solicitante']}</span></div>", unsafe_allow_html=True)
+                    inp_tipol=st.markdown(f"<div> <div style='display: inline-block; color: #000'>Tipologia: </div> <span style='color: #777; display: inline-block; margin-top: 10px; padding: 2px; background: #dbdbdb; border-radius: 5px'> {users_s[0]['tipologia']} - ({users_s[0]['class_servico'][0]})</span></div>", unsafe_allow_html=True)
                     descS=col1.text_input("Descrição Serviço", disabled=True,value=data_dict[0]['Descrição Serviço'])
+                    
                     stts_txt=col1.text_input(label="Status: ", disabled=True,value=data_dict[0]['Status'])
                     if data_dict[0]['Status'] == 'fechado':
                         stts=col1.selectbox(label="Fechamento: ", options=["finalizada"])

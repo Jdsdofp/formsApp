@@ -46,7 +46,7 @@ with st.form("cadSolicitacao", clear_on_submit=True):
         usr = urs.get("value") if isinstance(urs, dict) else ""
 
         # Obtendo os dados diretamente do banco de dados
-        usuarios = [usr for usr in col_usuario.find()]
+        usuarios = [usr for usr in col_usuario.find({"time": "Manutenção"})]
 
         # Criar uma lista para armazenar apenas os nomes dos usuários
         nomes_usuarios = []
